@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+</head>
+<body>
+    <form action="{% url 'gallery:upload_image' %}" method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <p>
+            <input id="id_image" type="file" accept="image/*" name="image" required >
+        </p>
+        <p>
+            Image Name:
+            <input id="id_name" type="text" name="name" required >
+        </p>
+        <input type="submit" value="Submit" />
+    </form>
+</br>
+    <a href="{% url 'gallery:image_gallery' %}"> Ver Imagenes. </a>
+</body>
+</html>

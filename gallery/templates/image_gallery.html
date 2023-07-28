@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+</head>
+<body>
+    {% load static %}
+    {% for image in images %}
+        <img src="{{ image.image.url }}" alt="{{ image.name }}"  style="width: 150px;" >
+        <p>{{ image.name }}</p>
+    {% endfor %}
+    <a href="{% url 'gallery:upload_image' %}"> Volver. </a>
+
+</body>
+</html>
