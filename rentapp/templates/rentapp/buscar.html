@@ -1,119 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>    
-    <style> 
-        .container {
-            width: 100%;
-            padding: 0;
-            min-height: 90vh;  
-            display: block;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }  
-        .content {
-      margin: 4px;
-        }
-        legend {
-            color: slateblue;
-            float: none; 
-            width: 100%;
-            padding: 0;
-            /* margin-bottom: 0.5rem; */
-            font-size: calc(1.275rem + .3vw);
-            line-height: inherit;
-        }
-      </style>
-    <title>Rentapp - Buscar</title>
+{% extends "base_generic.html" %}
+{% block title %} <title>Rentapp - Buscar</title> {% endblock %}
 
-</head>
-<body> 
-    <div class="container">
-        <header><h1>Rentapp</h1></header>
-        <div class="buscar">
-            <form action="{% url 'rentapp:buscar' %}" method="post" >
-                {% csrf_token %}   
-                <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required >
-                <input type="submit" value="Buscar" />
-            </form>        
-        </div>
-        <style>
-            .btn  {
-                margin: 9px;
-            }
-        </style>
-        <a href="/rentapp/">
-          <button class="btn btn-primary rounded-pill px-3" >Volver INDEX</button>
-        </a> 
+{% block content %}
+<h1>Rentapp - Buscar</h1>
+<div class="row">
+  {% if rentas %}
+  <h3>Resultados</h3>
+  {% for renta in rentas %}
+  <div class="content">
+    <fieldset style="background-color : #e9ecef">
+      <legend>Información Renta</legend>
+      <dl>
+        <dt><u>Local:</u></dt>
+        <dd><a target="_blank" href="{% url 'rentapp:detail' renta.id %}">{{ renta.direccion }}</a></dd>
+        <!--Probando fotos-->
+        {% for foto in fotos %}
+        {% if foto.renta_id == renta.id %}
+        <a target="_blank" href="/media/{{ foto.image_renta }}">
+          <img style="width: 75px; height: 65px;" class="fotos" src="/media/{{ foto.image_renta }}"
+            alt="{{ foto.name_foto_renta }}" />
+        </a>
 
-        {% if rentas %}
-        <h3>Resultados</h3>
-
-        {% for renta in rentas %}
-        <div class="content">
-
-        <fieldset style="background-color : #e9ecef">
-            <legend>Información Renta</legend>
-            <dl>
-                <dt><u>Local:</u></dt> 
-                <dd><a target="_blank" href="{% url 'rentapp:detail' renta.id %}">{{ renta.direccion }}</a></dd>
-                <!--Probando fotos-->
-                {% for foto in fotos %}
-                {% if foto.renta_id == renta.id %}
-                <td >{{ foto.name_foto_renta }}</td> 
-                <dd >
-                    <a  target="_blank" href="/media/{{ foto.image_renta }}" >
-                        <img class="fotos" src="/media/{{ foto.image_renta }}" alt="{{ foto.name_foto_renta }}" height='180px' />
-                    </a>
-                </dd> 
-                {% endif %}
-                {% endfor %}      
-                <dt><u>Referencia:</u></dt> 
-                <dd>{{ renta.referencia }}</dd>
-                <dt><u>E-mail:</u></dt> 
-                <dd>{{ renta.e_mail }}</dd>
-                <dt><u>pub-date:</u></dt> 
-                <dd>{{ renta.pub_date }}</dd>
-                <!-- <dt>id:</dt> 
+        {% endif %}
+        {% endfor %}
+        <dt><u>Referencia:</u></dt>
+        <dd>{{ renta.referencia }}</dd>
+        <dt><u>Contactar:</u></dt>
+        <dd>
+          <a href="mailto:{{renta.e_mail}}" target="_blank" rel="noopener noreferrer"><i class="bi bi-envelope"></i></a>
+          <a target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i></a>
+        </dd>
+        <dt><u>Publicado:</u></dt>
+        <dd>{{ renta.pub_date }}</dd>
+        <!-- <dt>id:</dt> 
                 <dd>{{ renta.id }}</dd>
                 -->
-            </dl>
-        </fieldset>
-    </div>    
-                {% endfor %} 
-                {% else %}
-                <h3>"No hay disponibles"</h3>
-                {% endif %}
-             
-           
-    <!--
-    Tienes Anterior: {{ rentas.has_previous }}</br>
-    Tienes Proxima: {{ rentas.has_next }}</br>
-    Numero de paginas paginadas: {{ rentas.paginator.num_pages }}
-    -->
-    {% if rentas.has_previous %}
-    <a href="?page=1">&laquo; Primera</a>
-    <a href="?page={{rentas.previous_page_number }}">
-    Anterior</a>
+      </dl>
+    </fieldset>
+  </div>
+  {% endfor %}
+  {% else %}
+  <h3>"No hay disponibles"</h3>
+  {% endif %}
 
-    {% endif %}
-</br>
-
-    Pagina {{ rentas.number }} of {{rentas.paginator.num_pages }} 
-
-    {% if rentas.has_next %}
-        <a href="?page={{ rentas.next_page_number }}">Siguiente</a>
-        <a href="?page={{ rentas.paginator.num_pages }}">Ultima &raquo</a>
-    {% endif %}
-</br></br>
-
-    <footer>WinderFree-Apps</footer>
-</div>
-</body>
-</html>
+  {% endblock %}

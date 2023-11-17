@@ -1,68 +1,237 @@
+import time
+from asgiref.sync import sync_to_async
+import asyncio
 from django.core.paginator import Paginator
 from geopy.geocoders import Nominatim
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-# from django.template import loader
-from . forms import *
+from .forms import *
+from .models import *
 
-from .models import Renta, Fotos
+def prueba_jquery(request):
+    datos_amistad = list(Amistad.objects.values().order_by("-id"))
+    datos = list(Mensaje.objects.values().order_by("-id"))
+    return render(request, 'rentapp/prueba_jquery.html', {'datos': datos, 'datos_amistad':datos_amistad })
+   
+
+def insertar_mensaje(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = MensajeForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_mensaje = Mensaje(
+                amistad = form.cleaned_data['amistad'], 
+                texto = form.cleaned_data['texto'],
+                tipo = 'rendador',
+                pub_date = time.strftime('%Y-%m-%d %I:%M')
+                 )
+            new_mensaje.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_mensaje/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        datos_amistad = list(Amistad.objects.values().order_by("-id"))
+        datos = list(Mensaje.objects.values().order_by("-id"))
+        # print (datos)
+        form = MensajeForm()
+    return render(request, 'rentapp/insertar_mensaje.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
+
+   
+def insertar_mensaje_rendatario(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = MensajeForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_mensaje = Mensaje(
+                amistad = form.cleaned_data['amistad'], 
+                texto = form.cleaned_data['texto'],
+                tipo = 'rendatario',
+                pub_date = time.strftime('%Y-%m-%d %I:%M')
+                 )
+            new_mensaje.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_mensaje_rendatario/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        datos_amistad = list(Amistad.objects.values().order_by("-id"))
+        datos = list(Mensaje.objects.values().order_by("-id"))
+        # print (datos)
+        form = MensajeForm()
+    return render(request, 'rentapp/insertar_mensaje_rendatario.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
+
+
+def insertar_amistad(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AmistadForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_amistad = Amistad(
+                usertario = form.cleaned_data['usertario'], 
+                userdador = form.cleaned_data['userdador'],
+                relacion = form.cleaned_data['relacion'],                
+                pub_date = time.strftime('%Y-%m-%d %I:%M') ) 
+            new_amistad.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_mensaje/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        datos = list(Amistad.objects.values().order_by("-id"))
+        # print (datos)
+        form = AmistadForm()
+    return render(request, 'rentapp/insertar_amistad.html', {'form': form, 'datos': datos, })
+
+def insertar_usertario(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = UsertarioForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_usertario = Usertario(
+                e_mail = form.cleaned_data['e_mail'], 
+                telefono = form.cleaned_data['telefono'],
+                password = form.cleaned_data['password'])
+            new_usertario.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_renta/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        #datos = list(Usertario.objects.values().order_by("-id"))
+        form = UsertarioForm()
+    return render(request, 'rentapp/insertar_usertario.html', {'form': form})
+
+def insertar_userdador(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = UserdadorForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_userdador = Userdador(
+                e_mail = form.cleaned_data['e_mail'], 
+                telefono = form.cleaned_data['telefono'],
+                password = form.cleaned_data['password'])
+            new_userdador.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('../../rentapp/insertar_userdador')
+    # if a GET (or any other method) we'll create a blank form
+    else:    
+        datos = list(Userdador.objects.values().order_by("-id"))
+        # print (datos)
+        form = UserdadorForm()
+    return render(request, 'rentapp/insertar_userdador.html', {'form': form, 'datos': datos, })
+
+#async_function = sync_to_async(sync_function, thread_sensitive=False)
+@sync_to_async    
+def insertar_foto(request):
+    
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = FotoForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            new_foto = Foto(
+                renta = form.cleaned_data['renta'], 
+                image_renta = form.cleaned_data['image_renta'],
+                name_foto_renta = form.cleaned_data['name_foto_renta'])
+            new_foto.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_foto/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        datos_fotos = list(Foto.objects.values().order_by("-id"))
+        form = FotoForm()
+    return render(request, 'rentapp/insertar_foto.html', {'datos_fotos': datos_fotos, 'form': form})
+
+
+def insertar_renta(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = RentaForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            #num_calle = form.cleaned_data['direccion']
+            #direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, DO."
+            direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, República Dominicana"
+            geolocator = Nominatim(user_agent="rentapp", timeout=10)
+            location = geolocator.geocode(direccion_full)        
+
+            # process the data in form.cleaned_data as required
+            # ...
+            new_renta = Renta(
+                usertario = form.cleaned_data['usertario'], 
+                direccion = direccion_full,
+                sector = form.cleaned_data['sector'], 
+                municipio = form.cleaned_data['municipio'], 
+                provincia = form.cleaned_data['provincia'],
+                referencia = form.cleaned_data['referencia'],
+                pub_date = time.strftime('%Y-%m-%d %I:%M'),
+                latitud = location.latitude if location else 'not' ,
+                longitud = location.longitude if location else 'not' )
+            new_renta.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/rentapp/insertar_foto/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = RentaForm()
+    return render(request, 'rentapp/insertar_renta.html', {'form': form})
 
 def index(request):
-   # fotos_rentas = list(Fotos.objects.all().select_related('renta'))
-   # template = loader.get_template("rentapp/index.html")
-    p = Paginator(Renta.objects.values().order_by("-pub_date"), 3)
+    p = Paginator(Renta.objects.values().order_by("-id"), 4)
     page = request.GET.get('page')
     rentas = p.get_page(page)
 
     context = {
-       # "fotos_rentas": fotos_rentas,
         "rentas": rentas,
-        "fotos": list(Fotos.objects.values()),
+        "fotos": list(Foto.objects.values()),
         'latest_renta_list' : list(Renta.objects.values()),
     }
     return render(request, "rentapp/index.html", context)
-    # return HttpResponse(template.render(context, request))
-    # output = ", ".join([q.direccion for q in latest_renta_list])
-    # return HttpResponse(output)
-
+    
 def detail(request, renta_id):
     
     try:
-        fotos = Fotos.objects.filter(renta=renta_id)
+        fotos = Foto.objects.filter(renta=renta_id)
         renta_location = Renta.objects.get(pk=renta_id)
         geolocator = Nominatim(user_agent="rentapp", timeout=10)
         location = geolocator.geocode(renta_location.direccion)        
-        #renta = Renta.objects.get(pk=renta_id)
         
     except Exception as e:
        return HttpResponse(f'ahora si :{e}' )
     context = {
             "fotos" : fotos,
-            #"renta" : renta,
             "location" : location,
             "renta_location" : renta_location,
         }
     return render(request, "rentapp/detail.html", context)
 
 def buscar(request):
-    fotos = Fotos.objects.all().select_related('renta')
+    fotos = Foto.objects.all().select_related('renta')
     if 'buscar' in request.POST:
         b = request.POST["buscar"]
         q_rentas = Renta.objects.filter(direccion__contains = b)
     else:
         q_rentas = Renta.objects.all().order_by('-id')        
-    p = Paginator(q_rentas, 5)  # Show 2 contacts per page.
-    #p = Paginator(Renta.objects.filter(direccion__contains = request.POST["buscar"] ), 2)  # Show 2 contacts per page.
-    #page = request.GET.get("page")
-    #rentas = p.get_page(page)
-    # if request.method == 'POST':
+    p = Paginator(q_rentas, 5)  
     page = request.GET.get("page")
     rentas = p.get_page(page)
-    #direccion = Renta.objects.filter(direccion__contains = request.POST["buscar"] )    
-    #direcciones = p.get_page(page_obj)
     context = {
     "rentas" : rentas,
-    "fotos" : list(Fotos.objects.values()),
+    "fotos" : list(Foto.objects.values()),
     }
     response = render(request, "rentapp/buscar.html", context )
     return response
@@ -78,7 +247,7 @@ def upload_image(request):
     elif request.method == 'POST':
         form = RentaForm(request.POST, request.FILES)
         if form.is_valid():
-            new_image = Fotos(
+            new_image = Foto(
                 image = form.cleaned_data['image'], 
                 name = form.cleaned_data['name'])
             new_image.save()

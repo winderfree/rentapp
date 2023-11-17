@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Rentapp - Add Userdador</title>{% endblock %}
+
+{% block content %}
+<h1>Rentapp - Add Userdador</h1>
+
+<div class="row">
+    <div class="content">
+        <fieldset>
+            <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
+            <legend>¿Rentar?</legend>
+            <p class="">Registrate para poder contactar con
+                los rentadores.</p>
+        </fieldset>
+    </div>
+    <div class="content">
+        <fieldset>
+            <legend>Registrate</legend>
+            <form action="{% url 'rentapp:insertar_userdador' %}" method="post">
+                {% csrf_token %}
+                {% if form.e_mail.errors %}
+                <span class="input-group-text" id="addon-wrapping"> {{
+                    form.e_mail.errors}}
+                </span>
+                {% endif %}
+                <div class="input-group flex-nowrap">
+
+                    <span class="input-group-text bi-envelope" id="addon-wrapping">{{ form.e_mail.label_tag }}
+                    </span>
+                    {{ form.e_mail }}
+
+                </div>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text bi bi-phone" id="addon-wrapping">{{form.telefono.label_tag}}
+                    </span>
+                    {{ form.telefono.errors }}
+                    {{ form.telefono }}
+
+                </div>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text " id="addon-wrapping">{{ form.password.label_tag }}
+                    </span>
+                    {{ form.password.errors }}
+                    {{ form.password }}
+
+                </div>
+
+
+
+                <input class="btn btn-primary" type="submit" value="Submit" />
+            </form>
+        </fieldset>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block pagination %}{% endblock %} 

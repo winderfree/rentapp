@@ -1,0 +1,152 @@
+{% extends "base_generic.html" %}
+{% block title %} <title>Rentapp - Nueva Renta</title> {% endblock %}
+
+{% block content %}
+<h1>Rentapp - Nueva</h1>
+
+    <style>
+      
+        .select-hidden {
+            display: none;
+        }
+
+        .select-visible {
+            display: inline;
+        }
+    </style>
+    
+
+        <div class="row">
+            <div class="content">
+
+
+                <fieldset>
+                    <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
+                    <legend>¿Rentar?</legend>
+                    <p>
+                        Registrate para poder contactar con
+                        los rentadores.</p>
+                </fieldset>
+            </div>
+            <div >
+                <fieldset>
+
+                    <legend class="bi-plus-square-fill"> Nueva Renta.</legend>
+                    <form action="{% url 'rentapp:insertar_renta' %}" method="post">
+                        {% csrf_token %}
+                        <!--usertario form-->
+
+                        <div class="input-group flex-nowrap">
+                            <span 
+                                class="input-group-text" id="addon-wrapping">@
+                            </span>
+                            {{ form.usertario.errors }}
+                            {{ form.usertario }}
+                        </div>
+                        <!--dirección form-->
+
+                        <div class="input-group flex-nowrap">
+                            <span 
+                                class="input-group-text" id="addon-wrapping">{{ form.direccion.label_tag }}
+                            </span>
+
+                            {{ form.direccion.errors }}
+                            {{ form.direccion }}
+
+                        </div>
+                        <div style="margin:10px 10px 10px 10px;" class=" flex-nowrap">
+
+                            <select onchange="getId()" id="provincia" name="provincia" required></select>
+
+                            <select class="select-hidden" onchange="getIdSector()" id="municipio" name="municipio"
+                                required></select>
+
+                            <select class="select-hidden" id="sector" name="sector"></select>
+                        </div>
+                        <!--referencia form-->
+                        <div class="input-group flex-nowrap">
+                            <span 
+                                class="input-group-text" id="addon-wrapping">{{ form.referencia.label_tag }}
+                            </span>
+                            {{ form.referencia.errors }}
+                            {{ form.referencia }}
+                        </div>
+                        <div>
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+        <script>
+            function getIdSector() {
+                const idMunicipio = document.getElementById('municipio').value;
+                const municipioQuery = document.querySelector('#municipio').value;
+                console.log(idMunicipio);
+                const SECTOR_DATA = '/media/JSON/sectores.json';
+                const selectSectores = document.querySelector("#sector");
+                fetch(SECTOR_DATA)
+                    .then((response) => response.json())
+                    .then((sectores) => {
+                        const HTMLResponseSector = sectores.map((element, x) =>
+                            (element.municipio_id == idMunicipio)
+                                ?
+        
+                                '<option  name="sector"  required >' + element.sector + '</option>'
+                                :
+                                ''
+                        );
+        
+                        selectSectores.className = "select-visible";
+                        selectSectores.className = "form-control text-center";
+        
+                        selectSectores.innerHTML = "<option value='' disabled selected hidden>-Elige Sector-</option>";
+                        selectSectores.innerHTML += HTMLResponseSector;
+                        console.log(HTMLResponseSector);
+                    });
+            }
+            function getId() {
+                const idCiudad = document.getElementById('provincia').value;
+                console.log(idCiudad);
+                const MUNI_DATA = '/media/JSON/municipios.json';
+                const selectMunicipios = document.querySelector("#municipio");
+        
+                fetch(MUNI_DATA)
+                    .then((response) => response.json())
+                    .then((municipios) => {
+                        const HTMLResponseMuni = municipios.map((element, x) =>
+                        (element.provincia_id == idCiudad
+                            ?
+                            '<option name="municipio" value=' + element.municipio_id + ' required >' + element.municipio + '</option>'
+                            :
+                            '')
+                        );
+        
+                        selectMunicipios.className = "select-visible";
+                        selectMunicipios.className = "form-control text-center";
+                        selectMunicipios.innerHTML = "<option class='form-control' value='' disabled selected hidden>-Elige Municipio-</option>";
+                        selectMunicipios.innerHTML += HTMLResponseMuni;
+        
+                        console.log(HTMLResponseMuni);
+                    });
+            }
+        
+            const PROVI_DATA = '/media/JSON/provincias.json';
+            const select = document.querySelector("#provincia");
+            const foto = document.querySelector("#imagen-provincia")
+            fetch(PROVI_DATA)
+                .then((response) => response.json())
+                .then((provincias) => {
+                    const HTMLResponseProvi = provincias.map((element, x) =>
+                        console.log(element.foto) +
+                        '<option name="provincia" value=' + element.provincia_id + ' required >[' + element.provincia_id + ']' + element.provincia + '</option>'
+                    );
+                    select.className = "form-control text-center";
+                    select.innerHTML = "<option value='' disabled selected hidden>-Elige Provincia-</option>";
+                    select.innerHTML += HTMLResponseProvi;
+                    console.log(select);
+                }); 
+        </script>
+    {% endblock %}
+    
+    {% block pagination %}{% endblock %}

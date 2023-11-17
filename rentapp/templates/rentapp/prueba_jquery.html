@@ -1,0 +1,32 @@
+{{ form|json_script:"form-json" }}
+{{ datos|json_script:"datos-json" }}
+{{ datos_amistad|json_script:"datos-amistad-json" }}
+
+{% if datos_amistad %}
+  
+        {% for amistad in datos_amistad %}
+
+        (id:{{ amistad.id }}) @
+            {{amistad.relacion}}
+            {% for dato in datos %}
+            {% if dato.amistad_id == amistad.id %}
+            ({{dato.tipo}}): 
+     
+                {{dato.texto}}
+                
+                <div style="text-align: right;"><u>{{dato.pub_date}}</u></div>
+      
+            {% endif %}
+
+            {% endfor %}
+          
+        {% endfor %}
+      
+
+      {% endif %}
+
+      {% if not datos_amistad %}
+      <div class="col-12 col-sm-6">
+        <p class=" relacion-mensaje bi bi-envelope" style="background-color: aliceblue;"> Vacio.</p>
+      </div>
+      {% endif %}

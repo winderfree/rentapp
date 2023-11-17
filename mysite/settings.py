@@ -14,13 +14,16 @@ SECRET_KEY = 'django-insecure-pwjby$fmbyexlzud)ew85(myf$dds&ui@%1&anaugd&h!y#na7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.111.103', 'localhost', '127.0.0.1']
+#192.168.111.103', 'localhost', '127.0.0.1', '10.0.0.182', '192.168.112.103','192.168.37.103
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-   # 'django_google_sso', 
+    'daphne',
+    'chat', 
     'rentapp.apps.RentappConfig',
     'gallery.apps.GalleryConfig',
     'django.contrib.admin',
@@ -46,7 +49,9 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,7 +65,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
+#daphne
+#channels
+ASGI_APPLICATION = "mysite.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

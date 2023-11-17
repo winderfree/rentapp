@@ -1,146 +1,174 @@
 <!DOCTYPE html>
-<head> 
+<html lang="en">
+
+<head>
+  <!-- Iconos de Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <!-- Bootstrap -->
   <link href="/media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>    
- 
-  <title>Rentapp - {{ location }}</title>
-  <style> 
-    #lienzoMapa {
-        width:auto; 
-        height:440px; 
-        margin: 0 auto; 
-        border: 5px solid; 
-    }
-    #formulario {
-        text-align:center;
-    }
+  <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+  <!-- My estilo css -->
+  <link href="/media/css/style.css" rel="stylesheet">
+
+  <title>Rentapp - {{ renta_location.direccion }}</title>
+  <style>
     .fotos {
-        height: auto;
-        width: auto;
-        margin: 5px;
-        padding: 4px;
-        display: inline-flexbox;
-        border: 4px solid #e4ede8;
-        border-radius: 12px;
+      height: auto;
+      width: auto;
+      margin: 5px;
+      padding: 4px;
+      display: inline-flexbox;
+      border: 4px solid #e4ede8;
+      border-radius: 12px;
     }
+
     .fotos:hover {
-        height: auto;
-        width: auto;
-        padding: 4px;
-        display: inline-flexbox;
-        border: 4px solid #3dbb76;
-        border-radius: 12px;
+      height: auto;
+      width: auto;
+      padding: 4px;
+      display: inline-flexbox;
+      border: 4px solid #3dbb76;
+      border-radius: 12px;
     }
+
     .imagen_renta {
-        cursor: grab;
-        margin: 4px;
-        width:75px; height:75px;
-        display: inline-block;       
+      cursor: grab;
+      margin: 0px;
+      width: 8em;
+      height: 6em;
+      display: inline-block;
+      transition: 600ms;
     }
+
     .imagen_renta:hover {
-        cursor: grab;
-        margin: 3px;
-        width:300px; height:200px;
-        display: inline-block;       
+      cursor: grab;
+      margin: 0px;
+      width: 33.5%;
+      height: 11em;
+      display: inline-block;
     }
-    
-      .container {
-            width: 100%;
-            padding: 0;
-            min-height: 90vh;  
-            display: block;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+
+    .btn {
+      margin: 9px;
+    }
   </style>
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
- 
-</head>
-<body>
-    <div class="container">
-      <header><h1>Rentapp</h1></header>
-      <div class="buscar">
-          <form action="{% url 'rentapp:buscar' %}" method="post" >
-              {% csrf_token %}   
-              <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required >
-              <input type="submit" value="Buscar" />
-          </form>        
-      </div>
-        <h3 id="location">{{ renta_location.direccion }}.</h3>
-        <a href="/rentapp/"><button class="btn btn-primary rounded-pill px-3" >Volver INDEX</button></a>
-    <!-- </br> -->
-        <a target="_blank" href="https://www.google.com/maps/place/{{renta_location.direccion}}/@{{ location.latitude }},{{ location.longitude }},17z/"><button class="btn btn-primary rounded-pill px-3"  value="{{ renta.direccion }}">Ir a Local</button></a> 
-    
-      <div hidden>
-        <p id="latitud" >{{ location.latitude }}</p>
-        <p id="longitud">{{ location.longitude }}</p>
-      </div>
-        
-    {% if location %}
-        {% for foto in fotos %}
-        <div class="fotos">
-            <div>
-              <dt>{{ foto.name_foto_renta }}</dt>
-              <dd>
-                <a target="_blank" href="{{ foto.image_renta.url }}" >
-                  <img class="imagen_renta" src="{{ foto.image_renta.url }}" alt="image_renta" />
-                </a>
-              </dd>      
-            </div>
-        </div>
-        {% endfor %}
-    {% endif %}
-    <!-- </br> -->
-      <a target="_blank" href="https://www.google.com/maps/place/{{renta_location.direccion}}/@{{ location.latitude }},{{ location.longitude }},17z/">
-        <button class="btn btn-primary rounded-pill px-3" value="{{ renta.direccion }}">Ir a Local</button>
-      </a> 
-    <!-- </br> -->
-    <h1>location map:</h1>
-    <div id="lienzoMapa" ></div>
 
-<script>
-    var latitud = document.getElementById("latitud")
-    var longitud = document.getElementById("longitud")
-    var map;
-    function initialize() {
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Rentapp</h1>
+    </header>
+    <div class="buscar">
+      <form action="{% url 'rentapp:buscar' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required>
+        <button style=" height: 30px; border-radius: 25px; " type="submit"><i class="bi bi-search"></i> </button>
+      </form>
+      <style>
+        .btn {
+          margin: 9px;
+        }
+
+        .row {
+          margin: 4px;
+          padding: 4px;
+        }
+      </style>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12">¿Buscas Renta?
+        <h3 id="location">{{ renta_location.direccion }}.</h3>
+
+        <a href="/rentapp/insertar_usertario"><button class="btn btn-primary rounded-pill px-3">¿Quieres
+            Articulo?</button></a>
+
+        <a href="/rentapp/"><button class="btn btn-primary rounded-pill px-3">Volver INDEX</button></a>
+        <!-- </br> -->
+        <a target="_blank"
+          href="https://www.google.com/maps/place/{{renta_location.latitud}}+{{renta_location.longitud}}/"><button
+            class="btn btn-primary rounded-pill px-3" value="{{ renta.direccion }}">Ir a Local</button></a>
+      </div>
+    </div>
+    <div>
+      <p id="latitud">{{ renta_location.latitud }}</p>
+      <p id="longitud">{{ renta_location.longitud }}</p>
+    </div>
+    {% if fotos %}
+    <div class="fotos">
+
+    {% for foto in fotos %}
+
+      <a target="_blank" href="{{ foto.image_renta.url }}"><img class="imagen_renta" src="{{ foto.image_renta.url }}"
+          alt="image_renta" /></a>
+
+    {% endfor %}
+    
+    </div>
+
+    {% endif %}
+    <!-- Contacto -->
+
+    <a href="../insertar_mensaje/" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
+        title="Contactar con Rentador."></i></a>
+    <a target="_parent" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i></a>
+    <!-- <Mapa local -->
+      {% if location %}
+      <h1>location map:</h1>
+      <div id="lienzoMapa"></div>
+      {% endif %}
+      {% if not location %}
+      <p>Not a Map</p>
+      {% endif %}
+    
+
+    <script>
+      var latitud = document.getElementById("latitud")
+      var longitud = '-' + document.getElementById("longitud")
+      var map;
+      function initialize() {
         const svgMarker = {
-        //path: "M -1,0 A 1,1 0 0 0 -3,0 1,1 0 0 0 -1,0M 1,0 A 1,1 0 0 0 3,0 1,1 0 0 0 1,0M -3,3 Q 0,5 3,3",
-            path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-            fillColor: "#3dbb76",
-            fillOpacity: 1,
-            strokeWeight: 0,
-            rotation: 45,
-            scale: 2,
-            anchor: new google.maps.Point(0, 20),
+          //path: "M -1,0 A 1,1 0 0 0 -3,0 1,1 0 0 0 -1,0M 1,0 A 1,1 0 0 0 3,0 1,1 0 0 0 1,0M -3,3 Q 0,5 3,3",
+          path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+          fillColor: "#3dbb76",
+          fillOpacity: 1,
+          strokeWeight: 0,
+          rotation: 45,
+          scale: 2,
+          anchor: new google.maps.Point(0, 20),
         };
 
         //var latitud = document.getElementById("latitud")
         var myLatlng = new google.maps.LatLng(latitud, longitud);
         var mapOptions = {
-            zoom: 18,
-            center: new google.maps.LatLng(latitud, longitud)
+          zoom: 18,
+          center: new google.maps.LatLng(latitud, longitud)
         };
-        
+
         var map = new google.maps.Map(document.getElementById('lienzoMapa'), mapOptions);
-        
+
         var marker = new google.maps.Marker({
-            position: myLatlng,
-            icon: svgMarker,
-            title: document.getElementById("location").innerHTML, 
+          position: myLatlng,
+          icon: svgMarker,
+          title: document.getElementById("location").innerHTML,
         });
 
         // To add the marker to the map, call setMap();
         marker.setMap(map);
-    }
-        google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-<script>
-    var latitud = document.getElementById("latitud").innerHTML;
-    var longitud = document.getElementById("longitud").innerHTML;
-</script>
-</div>
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <script>
+      var latitud = document.getElementById("latitud").innerHTML;
+      var longitud = document.getElementById("longitud").innerHTML;
+    </script>
+    </br></br>
+    <footer>WinderFree-Apps</footer>
+
+  </div>
 
 </body>
+
 </html>

@@ -1,224 +1,248 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link href="../media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="../media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>    
- 
-  <style> 
-    .container {
-        width: 100%;
-        padding: 0;
-        min-height: 90vh;  
-        display: block;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }  
-    .content {
-      margin: 4px;
-    }
-    legend {
-            color: slateblue;
-            float: none; 
-            width: 100%;
-            padding: 0;
-            /* margin-bottom: 0.5rem; */
-            font-size: calc(1.275rem + .3vw);
-            line-height: inherit;
-    }
-    #lienzoMapa {
-      /*visibility: hidden;*/
-        width:auto; 
-        height:340px; 
-        margin: 0 auto; 
-        border: 5px solid; 
-        border-radius: 50px;
-    }
-    fieldset{
-            border-radius: 50px;
-    }
-  </style> 
-    
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+{% extends "base_generic.html" %}
+{% block title %}<title>Index</title>{% endblock %}
 
-    <title>Rentapp</title>
-</head>
-<body>
-    <div class="container">
-        <header><h1>Rentapp</h1></header>
-        <div class="buscar">
-            <form action="{% url 'rentapp:buscar' %}" method="post" >
-                {% csrf_token %}   
-                <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required >
-                <input type="submit" value="Buscar" />
-            </form>
-            
-            <h2>Localmap:</h2>
-            <div id="lienzoMapa" ></div>
+<style>
+  .btn {
+    margin: 9px;
+  }
+
+  .row {
+    margin: 4px;
+    padding: 4px;
+  }
+</style>
+
+{% block content %}
+<h1>Rentapp</h1>
+<div class="row">
+  <div class="col-12 col-sm-12">¿Buscas Renta?
+    <h2>Mapa Local:</h2>
+    <div id="lienzoMapa"></div>
+  </div>
+  <div class="col-12 col-sm-12">¿Buscas Comida en R.D.?
+    <!-- Carrusel -->
+    <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="container">
+            <h3><u>Alsitio</u></h3>
+
+            <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png"
+              alt="Foto de Gino">
+            <p class="testimonio-texto"><u>Alsitio.com</u></p>
+            <div class="testimonio-info">
+              <p class="cargo">Restaurante.</p>
+            </div>
+          </div>
         </div>
-        <span id="location" hidden>"Localolo"</span>
-        
-    {{ latest_renta_list|json_script:"renta-json" }}
-    {{ fotos|json_script:"fotos-json" }}
-    {{ fotos_rentas|json_script:"fotos-rentas-json" }}
-    
-    <script>
-      let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
-      let jsondataFotos = JSON.parse(document.getElementById('fotos-json').textContent)
-      let myLatlng = [];
-      let result_lat = 0;
-      let result_lon = 0;
-        for(let i=0; i<jsondataRenta.length; i++){
-          result_lat += parseFloat(jsondataRenta[i].latitud.toString().substring(0,10));
-          result_lon += parseFloat(jsondataRenta[i].longitud.toString().substring(0,11));
+        <div class="carousel-item">
+          <div class="container">
+            <h3><u>Trocitos Troop</u></h3>
+            <img class="testimonio-imagen rounded-circle" width="130em" height="90em" src="/media/gallery/trocitos.png"
+              alt="Foto de Nora">
+            <p class="testimonio-texto"><u>Trocitos Tropicales.com</u></p>
+            <div class="testimonio-info">
+              <p class="cargo">Restaurante.</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="container">
+            <h3><u>Alsitio</u></h3>
 
-        }
-        let promedio_lat = (result_lat / jsondataRenta.length);
-        let promedio_lon = (result_lon / jsondataRenta.length);
+            <img class="testimonio-imagen rounded-circle" width="130em" height="90em" src="/media/gallery/alsitio.png"
+              alt="Foto de Leonardo">
+            <p class="testimonio-texto"><u>alsitio.com</u></p>
+            <div class="testimonio-info">
+              <p class="cargo">Restaurante.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    </div>
+  </div>
 
-        let marker = [];
-        let lat_prom = promedio_lat;
-        let lon_prom = promedio_lon;
-        document.write(promedio_lat.toString().substring(0,10));
-        document.write(promedio_lon.toString().substring(0,11));
-    
-        //var map;
-        function initialize() {
-          const svgMarker = {
-            //path: "M -1,0 A 1,1 0 0 0 -3,0 1,1 0 0 0 -1,0M 1,0 A 1,1 0 0 0 3,0 1,1 0 0 0 1,0M -3,3 Q 0,5 3,3",
-            path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-            fillColor: "#3dbb76",
-            fillOpacity: 1,
-            strokeWeight: 0,
-            rotation: 0,
-            scale: 1,
-            anchor: new google.maps.Point(0, 20),
-        };
-          var mapOptions = {
-                  zoom: 13,
-                  center: new google.maps.LatLng(lat_prom.toString().substring(0,10),lon_prom.toString().substring(0,11))
-              };
-          var map = new google.maps.Map(document.getElementById('lienzoMapa'), mapOptions);
-          
-          for(let i=0; i<jsondataRenta.length; i++){    
-          //var latitud = document.getElementById("latitud")
-          myLatlng[i] = new google.maps.LatLng(jsondataRenta[i].latitud.toString().substring(0,10),jsondataRenta[i].longitud.toString().substring(0,11));
-          marker[i] = new google.maps.Marker({
+  <span id="location" hidden>"Localolo"</span>
+
+  {{ latest_renta_list|json_script:"renta-json" }}
+  {{ fotos|json_script:"fotos-json" }}
+  {{ fotos_rentas|json_script:"fotos-rentas-json" }}
+
+  <script>
+    let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
+    let jsondataFotos = JSON.parse(document.getElementById('fotos-json').textContent)
+    let myLatlng = [];
+    let result_lat = 0;
+    let result_lon = 0;
+    let contadorFaltantesCord = 0;
+    for (let i = 0; i < jsondataRenta.length; i++) {
+      if (isNaN(jsondataRenta[i].latitud)) {
+        contadorFaltantesCord += 1;
+        console.log(jsondataRenta[i].latitud, "no es un numero. fueron:", contadorFaltantesCord);
+      }
+      else {
+        result_lat += parseFloat(jsondataRenta[i].latitud.toString().substring(0, 10));
+        result_lon += parseFloat(jsondataRenta[i].longitud.toString().substring(0, 11));
+      }
+
+    }
+    let promedio_lat = (result_lat / (jsondataRenta.length - contadorFaltantesCord));
+    let promedio_lon = (result_lon / (jsondataRenta.length - contadorFaltantesCord));
+
+    let marker = [];
+    let lat_prom = promedio_lat;
+    let lon_prom = promedio_lon;
+    //mostrando en pantalla
+    //document.write(promedio_lat.toString().substring(0, 10));
+    //document.write(promedio_lon.toString().substring(0, 11));
+
+    //var map;
+    function initialize() {
+      const svgMarker = {
+        //path: "M -1,0 A 1,1 0 0 0 -3,0 1,1 0 0 0 -1,0M 1,0 A 1,1 0 0 0 3,0 1,1 0 0 0 1,0M -3,3 Q 0,5 3,3",
+        path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+        fillColor: "#3dbb76",
+        fillOpacity: 1,
+        strokeWeight: 0,
+        rotation: 0,
+        scale: 1,
+        anchor: new google.maps.Point(0, 0),
+      };
+      var mapOptions = {
+        zoom: 6,
+        center: new google.maps.LatLng(lat_prom.toString().substring(0, 10), lon_prom.toString().substring(0, 11))
+      };
+      var map = new google.maps.Map(document.getElementById('lienzoMapa'), mapOptions);
+
+      for (let i = 0; i < jsondataRenta.length; i++) {
+        //var latitud = document.getElementById("latitud")
+        myLatlng[i] = new google.maps.LatLng(jsondataRenta[i].latitud.toString().substring(0, 10), jsondataRenta[i].longitud.toString().substring(0, 11));
+        marker[i] = new google.maps.Marker({
           position: myLatlng[i],
           icon: svgMarker,
-          title: document.getElementById("location").innerHTML = jsondataRenta[i].direccion, 
-              });
-              let newContentString = "";
-              let fotos = [];
-              let contentString = "";
-              for(let j=0; j<jsondataFotos.length; j++){
-                if(jsondataFotos[j].renta_id == jsondataRenta[i].id && jsondataFotos[j].image_renta != null){
-                    fotos[i] = jsondataFotos[j].renta_id;
+          title: document.getElementById("location").innerHTML = jsondataRenta[i].direccion,
+        });
+        let newContentString = "";
+        let fotos = [];
+        let contentString = "";
+        for (let j = 0; j < jsondataFotos.length; j++) {
+          if (jsondataFotos[j].renta_id == jsondataRenta[i].id && jsondataFotos[j].image_renta != null) {
+            fotos[i] = jsondataFotos[j].renta_id;
 
-                    newContentString += " <img src='../media/"+jsondataFotos[j].image_renta+"' width='70px' height='70' /> ";
-                    console.log(fotos[i]);
-                    console.log(newContentString);
+            newContentString += " <img src='../media/" + jsondataFotos[j].image_renta + "' width='70px' height='70' /> ";
+            //console.log(fotos[i]);
+            //console.log(newContentString);
 
-                    //document.write(fotos[j])
-                  }
-                    // fotos[cont] += jsondataFotos[j].renta_id;
-                }
-                contentString ='<div id="content">' +
-                '<div id="siteNotice">' +
-                "</div>" +
-                '<h1 id="firstHeading" class="firstHeading">Se Renta</h1>' +
-                newContentString +
-                '<div id="bodyContent">' +
-                "<p><b>Local:</b><a href='/rentapp/"+jsondataRenta[i].id+"/'>" +
-                " "+jsondataRenta[i].direccion+"</a> </br>" +
-                "("+jsondataRenta[i].referencia+" Publicado el "+jsondataRenta[i].pub_date+").</p>" +
-                "</div>" +
-                "</div>";
-                
-            let infowindow = new google.maps.InfoWindow({
-                content: contentString,
-                ariaLabel: jsondataRenta[i].direccion,
-            });
-            marker[i].addListener("click", () => {
-                infowindow.open({
-                anchor: marker[i],
-                map,
-                });
-            });              
-              // To add the marker to the map, call setMap();
-              marker[i].setMap(map);
-      }          
+            //document.write(fotos[j])
           }
-              google.maps.event.addDomListener(window, 'load', initialize);
-      </script>     
+          // fotos[cont] += jsondataFotos[j].renta_id;
+        }
+        contentString = '<div id="content">' +
+          '<div id="siteNotice">' +
+          "</div>" +
+          '<h1 id="firstHeading" class="firstHeading">Se Renta</h1>' +
+          newContentString +
+          '<div id="bodyContent">' +
+          "<p><b>Local:</b><a href='/rentapp/" + jsondataRenta[i].id + "/'>" +
+          " " + jsondataRenta[i].direccion + "</a> </br>" +
+          "(" + jsondataRenta[i].referencia + " Publicado el " + jsondataRenta[i].pub_date + ").</p>" +
+          "</div>" +
+          "</div>";
 
-<h2>Ultimas rentas</h2>
-{% if rentas %}
+        let infowindow = new google.maps.InfoWindow({
+          content: contentString,
+          ariaLabel: jsondataRenta[i].direccion,
+        });
+        marker[i].addListener("click", () => {
+          infowindow.open({
+            anchor: marker[i],
+            map,
+          });
+        });
+        // To add the marker to the map, call setMap();
+        marker[i].setMap(map);
+      }
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+
+  <h2> <u>Ultimas Rentas</u></h2>
+  {% if rentas %}
+  <div class="content">
     {% for renta in rentas %}
-        <div class="content" >
-            <fieldset style="background-color :#e9ecef">
-                <legend>Información Renta</legend>
-                <dl>
-                    <dt><u>Local:</u></dt> 
-                    <dd><a target="_blank" href="{% url 'rentapp:detail' renta.id %}">{{renta.direccion }}</a></dd>
+    <div class="col-12">
 
-                    {% for foto in fotos %}
-                    {% if renta.id == foto.renta_id  %}
-                    <td><u>{{ foto.name_foto_renta }}</u></td>
-                    <div class="fotos_dd">
-                        <a target="_blank" href="../media/{{ foto.image_renta }}" ><img class="fotos" src="../media/{{ foto.image_renta }}" alt="../media/{{ foto.name_foto_renta }}" height='180px' /></a>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
+      <legend style="align-content: center;"><i class="bi bi-house"></i> Info. Renta.</legend>
+      <!--Inicia acordeon de renta individual-->
+      <div class="accordion" id="accordionExample">
 
-                    <dt><u>Referencia:</u></dt> 
-                    <dd>{{ renta.referencia }}</dd>
-                    <dt><u>E-mail:</u></dt>
-                    <dd>{{ renta.e_mail }}</dd>
-                    <dt><u>pub-date:</u></dt>
-                    <dd>{{ renta.pub_date }}</dd>
-                </dl>
-            </fieldset>
-        </div>     
-    {% endfor %} 
-{% else %}
-    <p>no Rentas disponibles.</p>
-{% endif %}
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#{{renta.id}}" aria-expanded="false" aria-controls="{{renta.id}}">
 
-<!--Prueba-->
-<!--
-{{ rentas }}
-Tienes Anterior: {{ rentas.has_previous }}</br>
-Tienes Proxima: {{ rentas.has_next }}</br>
-Numero de paginas paginadas: {{ rentas.paginator.num_pages }}
--->
+              <!--Frente Acordeon-->
+              <span style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a class="u-condition  rounded-pill"
+                target="_parent" href="{% url 'rentapp:detail' renta.id %}"> {{ renta.direccion }}</a>
 
-</br>
-{% if rentas.has_previous %}
-<a href="?page=1">&laquo; Primera</a>
-<a href="?page={{rentas.previous_page_number }}">
-Anterior</a>
+            </button>
+          </h2>
+          <div id="{{renta.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div>
+                {% for foto in fotos %}
+                {% if renta.id == foto.renta_id %}
+                <a target="_parent" href="../media/{{ foto.image_renta }}"><img
+                    style="margin: 4px; height: 60px;width: 50px;" class="fotos" src="../media/{{ foto.image_renta }}"
+                    alt="../media/{{ foto.name_foto_renta }}" /></a>
+                {% endif %}
+                {% endfor %}
+              </div>
+              <p>Ver el <span style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a
+                  class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.id %}"> {{renta.direccion}}</a> 
+              </p>
+                            
+              <p>
+                Contacto de Renta:
 
-{% endif %}
+                <a href="../chat/{{ renta.usertario_id}}" target="_parent" rel="noopener noreferrer"><i
+                    class="bi bi-envelope"></i></a>
+                <a target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"
+                    title="Contactar con Whatapp."></i></a>
+              </p>
+              <p>
+                Referencia:
+                "<u>{{ renta.referencia }}</u>", 
+                Publicado:
+                "<u>{{ renta.pub_date }}</u>"
+              </p>
+            </div>
+            <code>.accordion-body</code>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
 
- Pagina {{ rentas.number }} of {{rentas.paginator.num_pages }} 
-
-{% if rentas.has_next %}
-    <a href="?page={{ rentas.next_page_number }}">Siguiente</a>
-    <a href="?page={{ rentas.paginator.num_pages }}">Ultima &raquo</a>
-{% endif %}
-</br></br>
-<footer>WinderFree-Apps</footer>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>no Rentas disponibles.</p>
+  {% endif %}
 
 </div>
 
-</body>
-</html>
+</div>
+{% endblock %}
+
 <!--
     <script>
       let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
@@ -239,55 +263,3 @@ Anterior</a>
 
     </script>
     -->
-<!--<style> 
-        * {
-        font-family: 'Times New Roman', Times, serif;
-        margin: 0;
-        padding: 0;
-        }
-        header {
-            width: 100%;
-            margin: auto;
-            padding: auto;
-            min-height: auto;  
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .contenedor {
-            width: 100%;
-            margin-left: -4px;
-            padding: 0;
-            min-height: 90vh;  
-            display: block;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .buscar {
-            margin: 0;
-            padding: 0;
-            padding-top: 14px;
-            min-height: 10vh;  
-            display: block;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .buscar form {
-            margin-bottom: 14px ;
-            padding: 0;  
-            
-        }
-        #lienzoMapa {
-          /*visibility: hidden;*/
-        width:auto; 
-        height:440px; 
-        margin: 0 auto; 
-        border: 5px solid; 
-    }
-    </style>
-    -->
-        

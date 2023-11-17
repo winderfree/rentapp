@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Iconos de Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <!-- Bootstrap -->
+  <link href="/media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
+  <!-- My estilo css -->
+  <link href="/media/css/style.css" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insertar Mensaje</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Rentapp</h1>
+    </header>
+    <div class="buscar">
+      <form action="{% url 'rentapp:buscar' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required>
+        <button style=" height: 30px; border-radius: 25px; " type="submit"><i class="bi bi-search"></i>
+        </button>
+      </form>
+      <style>
+        .btn {
+          margin: 9px;
+        }
+      </style>
+      <a href="/rentapp/insertar_renta/"><button class="btn btn-primary rounded-pill px-3 bi-plus-square-fill"> Nueva
+          Renta</button></a>
+
+      <a href="/rentapp/insertar_foto/"><button class="btn btn-primary rounded-pill px-3 bi bi-images"> Insertar
+          Foto</button></a>
+      <a href="/rentapp/insertar_userdador/"><button class="btn btn-primary rounded-pill px-3 bi-person-square"> Sign in,
+          Userdador</button></a>
+      <a href="/rentapp/insertar_usertario/"><button class="btn btn-primary rounded-pill px-3 bi-person-square"> Sign in,
+          Usertario</button></a>
+      <a href="/rentapp/insertar_amistad/"><button class="btn btn-primary rounded-pill px-3 bi-person-square"> Crea Nueva
+          Amistad</button></a>
+      <a href="/rentapp/insertar_mensaje/"><button class="btn btn-primary rounded-pill px-3 bi bi-envelope"> Insertar
+          Mensaje</button></a>
+      <a href="/rentapp/insertar_mensaje_rendatario/"><button class="btn btn-primary rounded-pill px-3 bi bi-envelope">
+          Insertar Mensaje Rendatario</button></a>
+
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <fieldset>
+          <legend class="bi bi-envelope"> Mensaje.</legend>
+          <form action="{% url 'rentapp:insertar_mensaje_rendatario' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text" id="addon-wrapping">@
+              </span>
+              {{ form.amistad }}
+
+            </div>
+
+            <div class="input-group flex-nowrap">
+              <span class="input-group-text bi bi-envelope" id="addon-wrapping">
+              </span> {{ form.texto }}
+              <button class=" btn btn-primary bi bi-send" type="submit">
+              </button>
+            </div>
+
+
+          </form>
+        </fieldset>
+      </div>
+      <style>
+        .texto-mensaje:hover {
+            background-color: rgb(189, 189, 221);
+            color: rgb(10, 20, 29);
+            
+            font-size: 14px;
+
+          }
+
+          .texto-mensaje {
+            font-size: 14px;
+
+            background-color: rgb(255, 255, 255);
+            color: rgb(25, 97, 161);
+            transition: 500ms;
+
+          }
+          .relacion-mensaje{
+            font-size: 24px;
+            font-weight: lighter;
+            padding-left: 4px;
+            margin-left: 4px;
+            color: rgb(22, 130, 225);
+          }
+          .texto-rendatario {
+            background-color: rgb(211, 235, 235);
+            margin: 2px;
+            text-align: justify;
+
+
+          }
+          .texto-rendatario u {
+            background-color: rgb(211, 235, 235);
+            font-size: 12px;
+            border-radius: 50px;
+            padding: 4px;
+
+          }
+          .texto-rendador {
+            background-color: rgb(217, 214, 233);
+            margin: 2px;
+            width: auto;
+
+          }
+          .texto-rendador u {
+            background-color: rgb(217, 214, 233);
+            font-size: 12px;
+            border-radius: 50px;
+            padding: 4px;
+          }
+      </style>
+      {% if datos_amistad %}
+      <div class="col-12 col-sm-6">
+
+        {% for amistad in datos_amistad %}
+
+        <div class="accordion" id="{{amistad.id}}-acordeon">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#{{amistad.id}}-collapse" aria-expanded="false" aria-controls="{{amistad.id}}-collapse">
+                <div class="relacion-mensaje" id="datos-mensajes-relacion">(Userdador:{{ amistad.userdador_id }}) @
+                  {{amistad.relacion}}</div>
+              </button>
+            </h2>
+            {% for dato in datos %}
+            {% if dato.amistad_id == amistad.id %}
+            <div id="{{amistad.id}}-collapse" class=" texto-rendatario accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#{{amistad.id}}-acordeon">
+              {% if dato.tipo == "rendatario" %}
+              <div class=" texto-rendatario  accordion-body texto-mensaje bi bi-envelope">({{dato.tipo}})
+
+                <textarea disabled style="resize: none; width: 100%;" >  {{dato.texto}}</textarea>
+                <br>
+                <div style="text-align: right;"><u>{{dato.pub_date}}</u></div>
+              </div>
+              {% endif %}
+              {% if dato.tipo == "rendador" %}
+              <div class=" texto-rendador  accordion-body texto-mensaje bi bi-envelope">({{dato.tipo}})
+
+                <textarea disabled style="resize: none; width: 100%;" >  {{dato.texto}}</textarea>
+                <br>
+                <div style="text-align: right;"><u>{{dato.pub_date}}</u></div>
+              </div>
+              {% endif %}
+            </div>
+
+            {% endif %}
+
+            {% endfor %}
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+
+      {% endif %}
+
+      {% if not datos_amistad %}
+      <div class="col-12 col-sm-6">
+        <p class=" relacion-mensaje bi bi-envelope" style="background-color: aliceblue;"> Vacio.</p>
+      </div>
+      {% endif %}
+
+      <div id="seccionRecargar" class="col-12 col-sm-6"></div>
+
+
+    </div>
+  </div>
+  <footer>WinderFree-Apps</footer>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    setInterval(
+      function () {
+        $('#seccionRecargar').load('/rentapp/prueba_jquery/');
+      }, 7000
+    );
+  });
+</script>

@@ -1,0 +1,71 @@
+{% extends "base_generic.html" %}
+{% block title %}<title>Rentapp - Nueva Foto</title>{% endblock %}
+
+{% block content %}
+<h1>Rentapp - Add Fotos</h1>
+
+<div class="row">
+    <div class="content">
+
+
+        <fieldset>
+            <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
+            <legend>¿Rentar?</legend>
+            <p>
+                Registrate para poder contactar con
+                los rentadores.</p>
+        </fieldset>
+    </div>
+
+    <div class="content">
+
+        <fieldset>
+            <legend class="bi bi-images"> Add Photo.</legend>
+            <form action="{% url 'rentapp:insertar_foto' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">@
+                    </span>
+                    {{ form.renta.errors }}
+                    {{ form.renta }}
+                </div>
+                <div class="custom-file">
+                    {{ form.image_renta.errors }}
+                    <i class="bi-images"></i>
+                    <input name="image_renta" type="file" class="custom-file-input" id="customFileLang" lang="es">
+                    <label class="custom-file-label" for="customFileLang"><i class="bi-images"></i> Imagen</label>
+                  </div>
+                
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">{{ form.name_foto_renta.label_tag }}
+
+                    </span>
+                    {{ form.name_foto_renta.errors }}
+                    {{ form.name_foto_renta }}
+                </div>
+
+                <input class="btn btn-primary" type="submit" value="Submit" />
+            </form>
+        </fieldset>
+    </div>
+
+
+    <h1 class="bi bi-images"> All Photo.</h1>
+
+    {% for foto in datos_fotos %}
+    <fieldset class="col-12 col-sm-2 ">
+
+        <legend>{{foto.renta_id}}</legend>
+        <image style="width: 50px;height: 50px;" src="/media/{{foto.image_renta}}" alt="imagen" />
+        {{foto.name_foto_renta}}
+    </fieldset>
+
+    {% endfor %}
+
+</div>
+{% endblock %}
+
+{% block pagination %}{% endblock %}
+
+</html>

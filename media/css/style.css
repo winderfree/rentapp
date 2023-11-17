@@ -1,0 +1,40 @@
+
+  
+  #lienzoMapa {
+  /*visibility: hidden;*/
+    width:auto; 
+    height:12rem; 
+    margin:  auto;
+    padding: auto;
+    border: 5px solid; 
+    border-radius: 0px;
+  }
+  legend {
+    color: aliceblue;
+    width: 100%;
+    font-size: 18px;
+    background-color: rgb(22, 12, 214);
+  }
+
+  fieldset {
+    text-align: center;
+    align-content: center;
+    margin: 3px;
+    padding: 2px;
+    border: 1px solid rgb(89, 43, 226);
+  }
+
+  .u-condition {
+    font-size: small;
+    color: #0b5ed7;
+  }
+
+  .input-group-text{
+    color: rgb(53, 40, 233) ;
+    background-color: #e4e8ee;
+    margin:10px 0px 10px 10px;
+  }
+   .texto-rendatario {
+    background-color: bisque;
+   }
+   
