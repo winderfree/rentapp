@@ -20,34 +20,23 @@
         <fieldset>
             <legend>Sign in</legend>
             <form action="{% url 'rentapp:insertar_usertario' %}" method="post">
-                {% csrf_token %}
-                {% if form.e_mail.errors %}
-                <span class="input-group-text bi bi-envelope col-12 col-sm-6" id="addon-wrapping"> {{
-                    form.e_mail.errors}}
-                </span>
-                {% endif %}
-                <div class="input-group flex-nowrap">
-
-                    <span class="input-group-text bi bi-envelope" id="addon-wrapping"> {{ form.e_mail.label_tag}}
-                    </span>
-                    {{ form.e_mail }}
-
+            {% csrf_token %}
+                <label for="inputUsername" class="form-label">{{ form.username.label}}</label>
+                <input name="username" id="inputUsername" class="form-control" type="text" placeholder="Username deseado" aria-label="default input example">
+                
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
                 </div>
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text bi bi-phone" id="addon-wrapping">{{form.telefono.label_tag}}
-                    </span>
-                    {{ form.telefono.errors }}
-                    {{ form.telefono }}
-
+                
+                <label for="inputPassword5" class="form-label">Password</label>
+                <input name="password" type="password" id="inputPassword5" class="form-control"
+                    aria-describedby="passwordHelpBlock">
+                <div id="passwordHelpBlock" class="form-text">
+                    Your password must be 8-20 characters long, contain letters and numbers, and must not contain
+                    spaces, special characters, or emoji.
                 </div>
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text " id="addon-wrapping">{{ form.password.label_tag }}
-                    </span>
-                    {{ form.password.errors }}
-                    {{ form.password }}
-
-                </div>
-
+                 <div>{{ form.groups }}</div>
 
 
                 <input class="btn btn-primary" type="submit" value="Submit" />

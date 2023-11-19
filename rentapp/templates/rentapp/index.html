@@ -206,26 +206,23 @@
                 {% endif %}
                 {% endfor %}
               </div>
-              <p>Ver el <span style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a
-                  class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.id %}"> {{renta.direccion}}</a> 
-              </p>
-                            
-              <p>
-                Contacto de Renta:
-
-                <a href="../chat/{{ renta.usertario_id}}" target="_parent" rel="noopener noreferrer"><i
-                    class="bi bi-envelope"></i></a>
-                <a target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"
-                    title="Contactar con Whatapp."></i></a>
-              </p>
-              <p>
+              <dl style="font-size: 24px;" >
+                <dt><i class="bi bi-house">Local:</i></dt>
+                <dd><a class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.id %}">
+                    {{renta.direccion}}</a></dd>
+                <dt><i class="bi bi-send-fill">Contact:</i></dt>
+                <dd><a href="../chat/{{ renta.usertario_id}}" target="_parent" rel="noopener noreferrer"> <i
+                  class="bi bi-envelope"></i></a>
+              <a target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"
+                  title="Contactar con Whatapp."></i></a></dd>
+              </dl>
+              <code>
                 Referencia:
                 "<u>{{ renta.referencia }}</u>", 
                 Publicado:
                 "<u>{{ renta.pub_date }}</u>"
-              </p>
+              </code>
             </div>
-            <code>.accordion-body</code>
           </div>
         </div>
       </div>
@@ -240,26 +237,4 @@
 
 </div>
 
-</div>
 {% endblock %}
-
-<!--
-    <script>
-      let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
-      let jsondataFotos = JSON.parse(document.getElementById('fotos-json').textContent)
-      console.log(jsondataFotos)
-      console.log(jsondataRenta)
-      for(x=0; x<jsondataRenta.length; x++){
-        document.write("<p>",jsondataRenta[x].referencia," id:",jsondataRenta[x].id,"</p>") 
-        for(i=0; i<jsondataFotos.length; i++){
-          if(jsondataFotos[i].renta_id == jsondataRenta[x].id ){
-          document.write("<p>",jsondataFotos[i].image_renta,"</p>") 
-          document.write("<p>",jsondataFotos[i].renta_id,"</p>") 
-
-          document.write("<img src=../media/",jsondataFotos[i].image_renta," alt='img' width='45px' />")
-          }
-        } 
-      }
-
-    </script>
-    -->

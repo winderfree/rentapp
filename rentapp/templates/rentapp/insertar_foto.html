@@ -25,10 +25,11 @@
                 {% csrf_token %}
 
                 <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">@
-                    </span>
-                    {{ form.renta.errors }}
-                    {{ form.renta }}
+                    <div class="input-group flex-nowrap">
+                        {{ form.renta }}
+                        <!--<input name="renta" value="{{ user.id }}" type="text">-->
+                        {{ form.usertario.errors }}
+                    </div>
                 </div>
                 <div class="custom-file">
                     {{ form.image_renta.errors }}

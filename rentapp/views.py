@@ -7,6 +7,12 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from .forms import *
 from .models import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect('/rentapp')
 
 def prueba_jquery(request):
     datos_amistad = list(Amistad.objects.values().order_by("-id"))
@@ -89,6 +95,8 @@ def insertar_amistad(request):
         form = AmistadForm()
     return render(request, 'rentapp/insertar_amistad.html', {'form': form, 'datos': datos, })
 
+from django.contrib.auth.hashers import make_password
+
 def insertar_usertario(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -97,11 +105,17 @@ def insertar_usertario(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            new_usertario = Usertario(
-                e_mail = form.cleaned_data['e_mail'], 
-                telefono = form.cleaned_data['telefono'],
-                password = form.cleaned_data['password'])
-            new_usertario.save()
+            user = form.save(commit=False)
+
+            username = form.cleaned_data['username'] 
+            password = form.cleaned_data['password']
+            groups = form.cleaned_data['groups']
+            email = form.cleaned_data['email']
+            #  Use set_password here
+            user.set_password(password)
+
+            user.save()
+
             # redirect to a new URL:
             return HttpResponseRedirect('/rentapp/insertar_renta/')
     # if a GET (or any other method) we'll create a blank form
@@ -133,7 +147,7 @@ def insertar_userdador(request):
     return render(request, 'rentapp/insertar_userdador.html', {'form': form, 'datos': datos, })
 
 #async_function = sync_to_async(sync_function, thread_sensitive=False)
-@sync_to_async    
+@login_required    
 def insertar_foto(request):
     
     # if this is a POST request we need to process the form data
@@ -156,7 +170,7 @@ def insertar_foto(request):
         form = FotoForm()
     return render(request, 'rentapp/insertar_foto.html', {'datos_fotos': datos_fotos, 'form': form})
 
-
+@login_required
 def insertar_renta(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -164,9 +178,11 @@ def insertar_renta(request):
         form = RentaForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+            provincia_nombre = form.cleaned_data['provincia'].split('.')
+            municipio_nombre =  form.cleaned_data['municipio'].split('.')
             #num_calle = form.cleaned_data['direccion']
             #direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, DO."
-            direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, República Dominicana"
+            direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, {municipio_nombre[1]}, {provincia_nombre[1]}, República Dominicana"
             geolocator = Nominatim(user_agent="rentapp", timeout=10)
             location = geolocator.geocode(direccion_full)        
 
@@ -176,8 +192,8 @@ def insertar_renta(request):
                 usertario = form.cleaned_data['usertario'], 
                 direccion = direccion_full,
                 sector = form.cleaned_data['sector'], 
-                municipio = form.cleaned_data['municipio'], 
-                provincia = form.cleaned_data['provincia'],
+                municipio = municipio_nombre[1], 
+                provincia = provincia_nombre[1],
                 referencia = form.cleaned_data['referencia'],
                 pub_date = time.strftime('%Y-%m-%d %I:%M'),
                 latitud = location.latitude if location else 'not' ,
@@ -201,7 +217,7 @@ def index(request):
         'latest_renta_list' : list(Renta.objects.values()),
     }
     return render(request, "rentapp/index.html", context)
-    
+@login_required
 def detail(request, renta_id):
     
     try:
@@ -218,7 +234,7 @@ def detail(request, renta_id):
             "renta_location" : renta_location,
         }
     return render(request, "rentapp/detail.html", context)
-
+# darle sentido al buscador
 def buscar(request):
     fotos = Foto.objects.all().select_related('renta')
     if 'buscar' in request.POST:

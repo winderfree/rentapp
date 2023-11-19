@@ -44,17 +44,8 @@ class AmistadForm(forms.ModelForm):
 class UsertarioForm(forms.ModelForm):
     class Meta:
         model = Usertario
-        fields = "__all__"
-        widgets = {
-            'e_mail': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'Inserte su E-mail'}),
-            'telefono': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'Ex: 809 - 555 - 5555'}),
-            'password': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'Nuevo Password'}),
-        }
-        labels = {
-            'e_mail':'Email ',
-            'telefono':'Phone',
-        }
-
+        fields = ('username', 'password', 'email', 'groups')
+        
 class UserdadorForm(forms.ModelForm):
     class Meta:
         model = Userdador

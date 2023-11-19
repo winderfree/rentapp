@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base_generic.html" %}
 
-<head>
-  <!-- Iconos de Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-  <!-- Bootstrap -->
-  <link href="/media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
-  <!-- My estilo css -->
-  <link href="/media/css/style.css" rel="stylesheet">
+{% block title %}<title>Rentapp - Details</title>{% endblock %}
 
-  <title>Rentapp - {{ renta_location.direccion }}</title>
+{% block content %}
+
+<div class="container">
+  <h1>Rentapp</h1>
+
   <style>
+    #lienzoMapa {
+      width: 90%;
+    }
+
     .fotos {
       height: auto;
       width: auto;
@@ -43,86 +43,51 @@
     .imagen_renta:hover {
       cursor: grab;
       margin: 0px;
-      width: 33.5%;
+      width: 12em;
       height: 11em;
       display: inline-block;
     }
-
-    .btn {
-      margin: 9px;
-    }
   </style>
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
-</head>
+  <div class="row">
+    <div class="col-12 col-sm-12">¿Buscas Renta?
+      <h3 id="location">{{ renta_location.direccion }}.</h3>
 
-<body>
-  <div class="container">
-    <header>
-      <h1>Rentapp</h1>
-    </header>
-    <div class="buscar">
-      <form action="{% url 'rentapp:buscar' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="buscar" placeholder="Pais, NombreCiudad, Calle." required>
-        <button style=" height: 30px; border-radius: 25px; " type="submit"><i class="bi bi-search"></i> </button>
-      </form>
-      <style>
-        .btn {
-          margin: 9px;
-        }
 
-        .row {
-          margin: 4px;
-          padding: 4px;
-        }
-      </style>
     </div>
-    <div class="row">
-      <div class="col-12 col-sm-12">¿Buscas Renta?
-        <h3 id="location">{{ renta_location.direccion }}.</h3>
-
-        <a href="/rentapp/insertar_usertario"><button class="btn btn-primary rounded-pill px-3">¿Quieres
-            Articulo?</button></a>
-
-        <a href="/rentapp/"><button class="btn btn-primary rounded-pill px-3">Volver INDEX</button></a>
-        <!-- </br> -->
-        <a target="_blank"
-          href="https://www.google.com/maps/place/{{renta_location.latitud}}+{{renta_location.longitud}}/"><button
-            class="btn btn-primary rounded-pill px-3" value="{{ renta.direccion }}">Ir a Local</button></a>
-      </div>
-    </div>
-    <div>
+    <div hidden>
       <p id="latitud">{{ renta_location.latitud }}</p>
       <p id="longitud">{{ renta_location.longitud }}</p>
     </div>
     {% if fotos %}
     <div class="fotos">
 
-    {% for foto in fotos %}
+      {% for foto in fotos %}
 
       <a target="_blank" href="{{ foto.image_renta.url }}"><img class="imagen_renta" src="{{ foto.image_renta.url }}"
           alt="image_renta" /></a>
 
-    {% endfor %}
-    
+      {% endfor %}
+
     </div>
 
     {% endif %}
     <!-- Contacto -->
-
-    <a href="../insertar_mensaje/" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
-        title="Contactar con Rentador."></i></a>
-    <a target="_parent" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i></a>
+    <div style="font-size: 42px;" >
+      <a href="../insertar_mensaje/" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
+          title="Contactar con Rentador."></i></a>
+      <a target="_parent" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i>
+      </a>
+    </div>
     <!-- <Mapa local -->
-      {% if location %}
-      <h1>location map:</h1>
-      <div id="lienzoMapa"></div>
-      {% endif %}
-      {% if not location %}
-      <p>Not a Map</p>
-      {% endif %}
-    
+    {% if location %}
+    <h1>location map:</h1>
+    <div id="lienzoMapa"></div>
+    {% endif %}
+    {% if not location %}
+    <p>Not a Map</p>
+    {% endif %}
+
 
     <script>
       var latitud = document.getElementById("latitud")
@@ -164,11 +129,8 @@
       var latitud = document.getElementById("latitud").innerHTML;
       var longitud = document.getElementById("longitud").innerHTML;
     </script>
-    </br></br>
-    <footer>WinderFree-Apps</footer>
+
 
   </div>
-
-</body>
-
-</html>
+  {% endblock %}
+  {% block pagination %}{% endblock %}

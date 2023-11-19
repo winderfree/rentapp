@@ -4,6 +4,8 @@
 
   {% if form.errors %}
     <p>Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
+    <input type="hidden" name="next" value="{{ next }}">
+
   {% endif %}
 
   {% if next %}
@@ -15,25 +17,37 @@
     {% endif %}
   {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
+  <form  method="post" action="{% url 'login' %}">
     {% csrf_token %}
+    <div class="row " >
     <table>
       <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
+        <td><label for="inputUsername" class="form-label">{{ form.username.label}}</label>
+        
+          <input name="username" id="inputUsername" class="form-control" type="text" placeholder="Username" aria-label="default input example">
+          </td>
+          <td></td>
       </tr>
       <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
+        <!--eso se arregla desde el form-->
+        <td><label for="inputPassword" class="form-label">{{ form.password.label_tag }}</label>
+        <input name="password" id="inputPassword" class="form-control" type="password" placeholder="Password" aria-label="default input example">
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><input type="submit" value="login"></td>
+        <td><input type="hidden" name="next" value="{{ next }}"></td>
+      </tr>
+      <tr>
+        <td><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></td>
+        <td>{# Asume que configura la vista de restablecimiento de contraseña en su URLconf #}</td>
       </tr>
     </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
+  </div>
   </form>
   
-  {# Asume que configura la vista de restablecimiento de contraseña en su URLconf #}
-  <p><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></p>
-
+  
 {% endblock %}
 
 {% block pagination %} {% endblock %}

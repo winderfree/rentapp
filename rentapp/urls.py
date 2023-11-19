@@ -24,9 +24,12 @@ urlpatterns = [
     path('insertar_mensaje/', views.insertar_mensaje, name='insertar_mensaje'),
     # ex: /rentapp/insertar_mensaje_rendatario/
     path('insertar_mensaje_rendatario/', views.insertar_mensaje_rendatario, name='insertar_mensaje_rendatario'),
+    # logout_user
+    path('/', views.logout_user, name='logout_user'),
     # probando
     path('prueba_jquery/', views.prueba_jquery, name='prueba_jquery'),
     # Nothing yet!
     path('image_rentapp/', views.image_rentapp, name='image_rentapp'),
     path('upload_image/', views.upload_image, name='upload_image'),
+
 ]
