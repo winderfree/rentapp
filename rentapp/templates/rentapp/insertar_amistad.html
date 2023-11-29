@@ -13,16 +13,21 @@
             <legend>Formulario De Amistad.</legend>
             <form action="{% url 'rentapp:insertar_amistad' %}" method="post">
                 {% csrf_token %}
-
-                {% for field in form %}
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="addon-wrapping">@ {{ field.label_tag }}
                     </span> {{ field.errors }}
-                    {{ field }}
-
+                    <input name="usertario" id="id_usertario" value="{{usertario_id}}" >
+                </div><div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">@ {{ field.label_tag }}
+                    </span> {{ field.errors }}
+                    <input name="userdador" id="id_userdador" > 
+                </div>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">@ {{ field.label_tag }}
+                    </span> {{ field.errors }}
+                    <input name="relacion" id="id_relacion" > 
                 </div>
 
-                {% endfor %}
 
                 <input class="btn btn-primary" type="submit" value="Submit" />
 

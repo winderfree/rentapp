@@ -34,7 +34,7 @@ class MensajeForm(forms.ModelForm):
 class AmistadForm(forms.ModelForm):
     class Meta:
         model = Amistad
-        fields = ['usertario', 'userdador', 'relacion']
+        fields = ['id','usertario', 'userdador', 'relacion']
         widgets = {
             'relacion': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'ex: Interes por Articulo.'}),
             'usertario': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control '}),
@@ -44,20 +44,13 @@ class AmistadForm(forms.ModelForm):
 class UsertarioForm(forms.ModelForm):
     class Meta:
         model = Usertario
-        fields = ('username', 'password', 'email', 'groups')
+        fields = ('username', 'password', 'email','categoria')
         
 class UserdadorForm(forms.ModelForm):
     class Meta:
         model = Userdador
-        fields = "__all__"
-        #fields = ['e_mail', 'telefono', 'password']
-
-        widgets = {
-            'e_mail': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control  bi-envelope','placeholder': 'Inserte su E-mail'}),
-            'telefono': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'Ex: 809 - 555 - 5555'}),
-            'password': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'Nuevo Password'}),
-        }
-
+        fields = ('username', 'password', 'email')
+        
 class FotoForm(forms.ModelForm):
     class Meta:
         model = Foto

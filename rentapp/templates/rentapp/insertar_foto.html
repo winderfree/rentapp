@@ -6,8 +6,6 @@
 
 <div class="row">
     <div class="content">
-
-
         <fieldset>
             <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
             <legend>¿Rentar?</legend>
@@ -16,25 +14,28 @@
                 los rentadores.</p>
         </fieldset>
     </div>
-
+    
     <div class="content">
-
         <fieldset>
             <legend class="bi bi-images"> Add Photo.</legend>
-            <form action="{% url 'rentapp:insertar_foto' %}" method="post" enctype="multipart/form-data">
+            {{ renta_id }}
+            <!-- {{ renta_title.direccion }} -->
+            {% for x in renta_title %}
+            {{ x.direccion }}
+            {%endfor%} 
+            <form action="{% url 'rentapp:insertar_foto' renta_id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="input-group flex-nowrap">
+                    
                     <div class="input-group flex-nowrap">
-                        {{ form.renta }}
-                        <!--<input name="renta" value="{{ user.id }}" type="text">-->
+                        <input hidden name="renta" value="{{ renta_id }}" type="text">
                         {{ form.usertario.errors }}
                     </div>
                 </div>
-                <div class="custom-file">
+                <div class="form-control custom-file">
                     {{ form.image_renta.errors }}
-                    <i class="bi-images"></i>
-                    <input name="image_renta" type="file" class="custom-file-input" id="customFileLang" lang="es">
+                    <input name="image_renta" type="file" class="custom-file-input form-control" id="customFileLang" lang="es">
                     <label class="custom-file-label" for="customFileLang"><i class="bi-images"></i> Imagen</label>
                   </div>
                 
@@ -50,21 +51,13 @@
             </form>
         </fieldset>
     </div>
-
-
-    <h1 class="bi bi-images"> All Photo.</h1>
-
-    {% for foto in datos_fotos %}
-    <fieldset class="col-12 col-sm-2 ">
-
-        <legend>{{foto.renta_id}}</legend>
-        <image style="width: 50px;height: 50px;" src="/media/{{foto.image_renta}}" alt="imagen" />
-        {{foto.name_foto_renta}}
-    </fieldset>
-
-    {% endfor %}
-
 </div>
+<p> 
+    {% for x in datos_fotos%}
+    {{x.renta}}-<img style="width: 36px; height: 36px;" src="/media/{{x.image_renta}}" alt="imagen-{{x.id}}">
+    {% endfor %}
+</p>
+<p>{{renta_id}}</p>
 {% endblock %}
 
 {% block pagination %}{% endblock %}

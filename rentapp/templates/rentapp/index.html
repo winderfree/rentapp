@@ -72,13 +72,10 @@
 
   <span id="location" hidden>"Localolo"</span>
 
-  {{ latest_renta_list|json_script:"renta-json" }}
-  {{ fotos|json_script:"fotos-json" }}
-  {{ fotos_rentas|json_script:"fotos-rentas-json" }}
+  <!-- {{ fotos_rentas|json_script:"fotos-rentas-json" }} -->
 
   <script>
     let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
-    let jsondataFotos = JSON.parse(document.getElementById('fotos-json').textContent)
     let myLatlng = [];
     let result_lat = 0;
     let result_lon = 0;
@@ -174,10 +171,16 @@
     google.maps.event.addDomListener(window, 'load', initialize);
   </script>
 
+  <!-- {% for x in rentas %}
+    {{x}}<br>
+    {{x.renta__id}}
+  {% endfor %} -->
+
   <h2> <u>Ultimas Rentas</u></h2>
   {% if rentas %}
   <div class="content">
     {% for renta in rentas %}
+  
     <div class="col-12">
 
       <legend style="align-content: center;"><i class="bi bi-house"></i> Info. Renta.</legend>
@@ -187,31 +190,29 @@
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#{{renta.id}}" aria-expanded="false" aria-controls="{{renta.id}}">
+              data-bs-target="#{{renta.renta__id}}" aria-expanded="false" aria-controls="{{renta.renta__id}}">
 
               <!--Frente Acordeon-->
               <span style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a class="u-condition  rounded-pill"
-                target="_parent" href="{% url 'rentapp:detail' renta.id %}"> {{ renta.direccion }}</a>
+                target="_parent" href="{% url 'rentapp:detail' renta.renta__id %}"> {{ renta.renta__direccion }}</a>
 
             </button>
           </h2>
-          <div id="{{renta.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
+          <div id="{{renta.renta__id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div  style="background-color: rgb(239, 244, 244);" class="accordion-body">
               <div>
-                {% for foto in fotos %}
-                {% if renta.id == foto.renta_id %}
-                <a target="_parent" href="../media/{{ foto.image_renta }}"><img
-                    style="margin: 4px; height: 60px;width: 50px;" class="fotos" src="../media/{{ foto.image_renta }}"
-                    alt="../media/{{ foto.name_foto_renta }}" /></a>
-                {% endif %}
-                {% endfor %}
+                <a target="_parent" href="../media/{{ renta.image_renta }}">
+                  <img
+                    style="margin: 4px; height: 60px;width: 50px;" class="fotos" src="../media/{{ renta.image_renta }}"
+                    alt="../media/{{ renta.name_foto_renta }}" />
+                </a>
               </div>
               <dl style="font-size: 24px;" >
                 <dt><i class="bi bi-house">Local:</i></dt>
-                <dd><a class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.id %}">
-                    {{renta.direccion}}</a></dd>
+                <dd><a class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.renta__id %}">
+                    {{renta.renta__direccion}}</a></dd>
                 <dt><i class="bi bi-send-fill">Contact:</i></dt>
-                <dd><a href="../chat/{{ renta.usertario_id}}" target="_parent" rel="noopener noreferrer"> <i
+                <dd><a href="insertar_amistad/{{renta.renta__usertario}}-{{user.id}}-{{renta.renta__id}}" target="_parent" rel="noopener noreferrer"> <i
                   class="bi bi-envelope"></i></a>
               <a target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"
                   title="Contactar con Whatapp."></i></a></dd>

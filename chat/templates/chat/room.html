@@ -5,78 +5,176 @@
 {% block content %}
 <title>Rentapp - Chat Room</title>
 <style>
-    textarea {
+  textarea {
 
-        resize: none;
-        width: 250px;
-        box-sizing: content-box;
-        /* form-sizing: content;*/
-    }
+    resize: none;
+    width: 250px;
+    box-sizing: content-box;
+    /* form-sizing: content;*/
+  }
 </style>
-
-<h1>@<u>{{ room_name }}</u></h1>
+<div>
+  {% for x in resultado_amistad_rendador_renta %}
+    <p>{{x}}</p>
+  {% endfor %}<br>
+  {% for x in resultado_amistad_rendador_renta %}
+    <p><a href="{% url 'rentapp:detail' x.renta_id %}" >{{x.relacion}}</a></p>
+  {% endfor %}
+</div>
+<!--Convierte el diccionario en json-->
 {{ room_name|json_script:"room-name" }}
+{{ datos|json_script:"datos-json" }}
+
+<h1>@<u>{{ room_name }}</u></h1>  
+<form action="{% url 'chat:room' room_name  %}" method="post">
+
+  <textarea style="height: auto; width: 100%;" id="chat-log" readonly="readonly"></textarea>
+  <!--Input Mensaje.amistad-->
+  {{ form.amistad }}
+  <input id="id_texto" type="text" size="30"><br>
+  <input id="chat-message-submit" type="button" value="Send">
 
 
-<textarea id="chat-log" readonly="readonly"></textarea><br>
-<input id="chat-message-input" type="text" size="30"><br>
-<input id="chat-message-submit" type="button" value="Send">
+
+</form>
 
 <script>
-    /*variable para el tamaño de textarea*/
-    let cont = 2;
+  /*variable para el tamaño de textarea*/
+  // let cont = 2;
 
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+  const roomName = JSON.parse(document.getElementById('room-name').textContent);
+  const datos_json = JSON.parse(document.getElementById('datos-json').textContent);
+  //datos_json.map(iter => console.log(iter.texto));
 
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/chat/'
-        + roomName
-        + '/'
-    );
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.message) + '\n' + data.pub_date + '\n';
-        document.querySelector('#chat-log').style = "height:" + cont + "rem;";
-        console.log(document.querySelector('#chat-log'))
-        /*variable para el tamaño de textarea*/
-        cont += 2.5;
+  // console.log(datos)
+  const chatSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/chat/'
+    + roomName
+    + '/'
+  );
 
-    };
-    chatSocket.onclose = function (e) {
-        console.error('chat socket close unexpectedly');
-    };
+  chatSocket.onopen = function (e) {
+    console.log("Estas empezando!!!");
+    let tabla= []
+    datos_json.map(iter => (
+      tabla.push(`${iter.texto} \n`)));
 
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function (e) {
-        if (e.key === 'Enter') { //enter, return
-            document.querySelector('#chat-message-submit').click();
-            document.querySelector('#chat-log').style = "height:" + cont + "rem;";
-            console.log(document.querySelector('#chat-log'))
+    // alert(tabla.join(''))
+    document.querySelector('#chat-log').value = tabla.join('') 
+  }
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    console.log(data)
+    //document.querySelector('#chat-log').value += datos_json.map(iter => (iter.texto + '\n'));
+    document.querySelector('#chat-log').value += (data.texto) + data.pub_date + data.amistad_id + 'Nuevo mensaje...\n';
+    document.querySelector('#chat-log').style = `height:${datos_json.length}%; width: 100%;`;
+    alert('Has recibido un mensaje')
+
+  };
+  chatSocket.onclose = function (e) {
+    let tabla= []
+    datos_json.map(iter => (
+      tabla.push(`${iter.texto} \n`)));
+    console.error('chat socket close unexpectedly');
+    location.reload();
+
+  };
+
+  document.querySelector('#id_texto').focus();
+  document.querySelector('#id_texto').onkeyup = function (e) {
+    if (e.key === 'Enter') { //enter, return
+      document.querySelector('#chat-message-submit').click();
+      document.querySelector('#chat-log').style = `height:${datos_json.length}%; width: 100%;`;
+      console.log(document.querySelector('#chat-log'))
+    }
+  };
+
+  document.querySelector('#chat-message-submit').onclick = function (e) {
+    const messageInputDom = document.querySelector('#id_texto');
+    const texto = messageInputDom.value;
+    // nuevo campo amistad_clave foranea
+    const amistadInputDom = document.querySelector('#id_amistad');
+    const amistad = amistadInputDom.value;
+    // Envia al WebSocket un nuevo mensaje
+    chatSocket.send(JSON.stringify({
+      'amistad': amistad,
+      'texto': texto,
+      'pub_date': new Date(),
+    }));
+
+    messageInputDom.value = '';
+
+  };
+  //window.onload(document.querySelector('#chat-log').value += datos_json.map(iter => (iter.texto + '\n' )));
+
+</script>
+
+<div class="content">
+  <fieldset>
+    <legend class="bi bi-envelope"> Mensaje.</legend>
+    <!-- <form id="form" novalidate> -->
+    <form action="{% url 'chat:room' room_name %}" method="post">
+      {% csrf_token %}
+      <div class="input-group flex-nowrap">
+        <span class="input-group-text" id="addon-wrapping">@
+        </span>
+        {{ form.amistad }}
+
+      </div>
+
+      <div class="input-group flex-nowrap">
+        <span class="input-group-text bi bi-envelope" id="addon-wrapping">
+        </span> {{ form.texto }}
+        <button id="submit_mensaje" class=" btn btn-primary bi bi-send" type="submit"></button>
+      </div>
+      <!-- <script>
+        //// Variables
+        // Get csrf token
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const form = document.querySelector('#form');
+
+        //// Functions
+
+        function sendForm(event) {
+          event.preventDefault();
+          const request = new Request(
+            "{% url 'chat:room' room_name %}",
+            {
+              method: 'POST',
+              headers: { 'X-CSRFToken': csrfToken },
+              mode: 'same-origin',
+              body: new FormData(form)
+            }
+          );
+          fetch(request)
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              }
+              throw new Error('Network response was not ok.');
+            })
+            .then(function (data) {
+              console.log(data)
+              document.querySelector('#chat-log').value += datos_json.map(iter => (iter.texto + '\n' )) ;
+              if (data.status === 'ok') {
+
+                document.querySelector('#chat-log').value += datos_json.map(iter => (iter.texto + '\n' )) ;
+                alert('Mensaje enviado correctamente');
+              } else {
+                alert('Error al enviar el mensaje');
+              }
+            });
         }
 
-    };
+        //// Events
+        form.addEventListener('submit', sendForm);
 
-    document.querySelector('#chat-message-submit').onclick = function (e) {
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
+      </script> -->
 
-        // Envia al WebSocket un nuevo mensaje
-        chatSocket.send(JSON.stringify({
-            'amistad': message,
-            'message': message,
-            'pub_date': new Date(),
-        }));
-
-        div = document.createElement('div');
-        console.log(div)
-        div.textContent = cont;
-        //div.style = " height: 1px; "
-        console.log(cont);
-        messageInputDom.value = '';
-
-    };
-</script>
+    </form>
+  </fieldset>
+</div>
 {% endblock %}
 {% block pagination %}{% endblock %}

@@ -1,40 +1,32 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Usertario(User, models.Model):
+class Usertario(User, models.Model):    
     class Meta:
-        proxy = True
+        db_table = "Usertario"
     
-    def __str__(self):
-        return self.username
-    
-class Userdador(models.Model):
-    
-    e_mail = models.EmailField(max_length=100)
-    telefono =  models.CharField(max_length=50)
-    password = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.e_mail
-
-class Amistad(models.Model):
-    usertario = models.ForeignKey(Usertario, on_delete=models.CASCADE)
-    userdador = models.ForeignKey(Userdador, on_delete=models.CASCADE)
-    relacion = models.CharField(max_length=200, null=True)
-    pub_date = models.DateTimeField("fecha publicado", null=True)
-
-    def __str__(self):
-        return f"Buzon de {self.id}"
-
-class Mensaje(models.Model):
-    amistad = models.ForeignKey(Amistad, on_delete=models.CASCADE)
-    texto = models.CharField(max_length=250)
+    CATEGORIA_CHOICES = [
+        ("propietario", "Propietario"),
+        ("abogado", "Abogado"),
+        ("empresa", "Empresa o Compañia"),
+    ]
     tipo = models.CharField(max_length=24, null=True )
-    pub_date = models.DateTimeField("fecha publicado", null=True)
-    
+    categoria = models.CharField(
+        max_length=24,
+        choices = CATEGORIA_CHOICES,
+        default = "propietario",
+    )
     def __str__(self):
-        return f"{self.amistad}"
+        return f'({self.username}-{self.categoria})'
     
+class Userdador(User, models.Model):
+    class Meta:
+        db_table = "Userdador"
+
+    tipo = models.CharField(max_length=24, null=True )    
+    def __str__(self):
+        return f'{self.username}'
+
 class Renta(models.Model):
     usertario = models.ForeignKey(Usertario, on_delete=models.CASCADE, null=True)
     direccion = models.CharField(max_length=200)
@@ -49,7 +41,33 @@ class Renta(models.Model):
 
     # q = Question(question_text="What's new?", pub_date=timezone.now())
     def __str__(self):
-        return self.direccion
+        return f'{self.direccion}'
+
+class Amistad(models.Model):
+    renta = models.ForeignKey(Renta, on_delete=models.CASCADE, null=True)
+    usertario = models.ForeignKey(Usertario, on_delete=models.CASCADE)
+    userdador = models.ForeignKey(Userdador, on_delete=models.CASCADE)
+    relacion = models.CharField(max_length=200, null=True)
+    pub_date = models.DateTimeField("fecha publicado", null=True)
+
+    def __str__(self):
+        return f'{self.id}'
+    # slug = models.SlugField(editable=False)
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.title)
+    #     super().save(*args, **kwargs)
+
+class Mensaje(models.Model):
+    amistad = models.ForeignKey(Amistad, on_delete=models.CASCADE)
+    texto = models.CharField(max_length=250)
+    tipo = models.CharField(max_length=24, null=True )
+    pub_date = models.DateTimeField("fecha publicado", null=True)
+    
+    def __str__(self):
+        return f"{self.amistad}"
+    
+
     
 class Foto(models.Model):
     renta = models.ForeignKey(Renta, on_delete=models.CASCADE)
@@ -57,4 +75,4 @@ class Foto(models.Model):
     name_foto_renta = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.name_foto_renta
+        return f'self.id'

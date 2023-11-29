@@ -46,28 +46,28 @@
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 {% endblock %}
-                <br>
+
                 {% block sidebar %}
                 <a style="font-size: 24px;color: #198754;" class="" href="/rentapp/"><i
-                        style="font-size: 43px;color: #198754;" class="bi bi-house"></i>Index</a>
+                        style="font-size: 43px;color: #198754;" class="bi bi-house"></i></a>
 
-                
 
-                                    {% if user.is_authenticated %}
-                                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                                                    aria-controls="panelsStayOpen-collapseTwo">
-                                                    <i class="bi bi-menu-app-fill"></i> Menú
-                                                </button>
-                                            </h2>
-                    
-                                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                                                <div class="accordion-body">
-                                                    <nav class="nav flex-column">
-                                    <a class="nav-link active" aria-current="page" href="#">Active</a>
+
+                {% if user.is_authenticated %}
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                                aria-controls="panelsStayOpen-collapseTwo">
+                                <i class="bi bi-menu-app-fill"></i> Menú
+                            </button>
+                        </h2>
+
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <nav class="nav flex-column">
+
                                     <a class="nav-link " href="/rentapp/"><i class="bi bi-house"></i> Index</a>
                                     <a class="nav-link " href="/rentapp/insertar_renta/"><i
                                             class="bi-plus-square-fill"></i> Nueva
@@ -83,46 +83,54 @@
                                     <a class="nav-link" href="/rentapp/insertar_amistad/"><i
                                             class="bi-person-square"></i> Add
                                         Amistad</a>
-                                    <a class="nav-link" href="/rentapp/insertar_mensaje/"><i class="bi-envelope"></i>
+                                    <a class="nav-link" href="/chat/"><i class="bi-envelope"></i>
                                         Add Mensaje</a>
-                                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                                    {% if user.is_authenticated %}
+                                    <dl>
+                                        <dt>tipo:</dt>
+                                        <dd>{{ user.tipo }}.</dd>
+                                        <dt>Categoria User:</dt>
+                                        <dd>{{ user.categoria }}.</dd>
+                                        <dt>User:</dt>
+                                        <dd>{{ user.username }}.</dd>
+                                        <dt>email:</dt>
+                                        <dd>{{ user.email }}.</dd>
+                                        <dt>Activo:</dt>
+                                        <dd><a href="{% url 'rentapp:logout_user'%}?next={{request.path}}"><i
+                                                    class="bi bi-door-closed-fill"></i>
+                                                Cerrar sesión</a>.</dd>
+                                        <dd><code>Aquí cierra sessión...</code></dd>
+                                    </dl>
 
-                                    
-                                            </nav>
-                                
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                    
+
                                     {% endif %}
-                                
-                <div>
-                    {% if user.is_authenticated %}
-                    <dl>
-                        <dt>User:</dt>
-                        <dd>{{ user.username }}.</dd>
-                        <dt>email:</dt>
-                        <dd>{{ user.email }}.</dd>
-                        <dt>Activo:</dt>
-                        <dd><a href="{% url 'rentapp:logout_user'%}?next={{request.path}}"><i class="bi bi-door-closed-fill"></i>
-                            Cerrar sesión</a>.</dd>
-                        <dd><code>Aquí cierra sessión...</code></dd>
-                    </dl>
-                        {% else %}
-                    <dl>
-                        <dt>Dseactivo:</dt>
-                        <dd><a class="nav-link" href="/rentapp/"><i class="bi bi-house"></i> Index</a>
-                        <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
-                                Iniciar sesión</a> </dd>
-                                <dd><code>Aquí inicia sessión...</code></dd>
 
-                    </dl>
+                                </nav>
 
-                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {% endblock %}
+                {% else %}
+                <dl>
+                    <dt><code>Desactivo</code></dt>
+                    <dd>
+                        <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
+                            Sign'Rendador'</a>
+                    </dd><dd>
+                        <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
+                            Sign'Rendatario'</a>
+                    </dd>
+                    <dd>
+                        <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
+                            Iniciar sesión</a>
+                    </dd>
+                    <dd><code>Aquí inicia sessión...</code></dd>
 
+                </dl>
+                {% endif %}
+
+                {% endblock %}
             </div>
             <div class="col-sm-7 ">
 
