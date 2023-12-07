@@ -10,15 +10,19 @@ def index(request):
 
 def room(request, room_name):
     # existe_amistad = Amistad.objects.filter()
-    datos_amistad = list(Amistad.objects.values().order_by("-id"))
+
+    # amistades_userdador = Amistad.objects.filter(userdador = userdador_id).select_related('renta','usertario','userdador').values(
+        # 'renta', 'userdador', 'usertario').order_by('-id')    
+        # id, mensaje, pub_date, relacion, userdador, userdador_id, usertario, usertario_id
+    # amistad = Amistad.objects.filter(userdador=userdador_id).values("id", 'pub_date', 'relacion', 'userdador', 'usertario',)
+    datos_amistad = Amistad.objects.values().order_by("-id")
     datos = list(Mensaje.objects.values().filter(amistad_id = room_name).order_by("id"))
-
-
-    resultado_amistad_rendador_renta = Amistad.objects.filter(id=room_name).values()
+    resultado_amistad_actual = Amistad.objects.filter(id=room_name).values()
+    
 
     form = MensajeForm()
     #return render(request, 'rentapp/insertar_mensaje.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
-    return render (request, "chat/room.html", {'resultado_amistad_rendador_renta':resultado_amistad_rendador_renta,'room_name': room_name, 'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
+    return render (request, "chat/room.html", {'resultado_amistad_actual':resultado_amistad_actual,'room_name': room_name, 'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
 
     # if this is a POST request we need to process the form data
     # if request.method == 'POST':

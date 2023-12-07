@@ -13,12 +13,11 @@
 </style>
 
 {% block content %}
-<h1>Rentapp</h1>
 <div class="row">
-  <div class="col-12 col-sm-12">¿Buscas Renta?
+  <!-- <div class="col-12 col-sm-12">¿Buscas Renta?
     <h2>Mapa Local:</h2>
     <div id="lienzoMapa"></div>
-  </div>
+  </div> -->
   <div class="col-12 col-sm-12">¿Buscas Comida en R.D.?
     <!-- Carrusel -->
     <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
@@ -72,8 +71,8 @@
 
   <span id="location" hidden>"Localolo"</span>
 
-  <!-- {{ fotos_rentas|json_script:"fotos-rentas-json" }} -->
-
+  {{ fotos_rentas|json_script:"rentas-json" }} 
+  <!--Tabajar con el mapa-->
   <script>
     let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
     let myLatlng = [];
@@ -176,30 +175,29 @@
     {{x.renta__id}}
   {% endfor %} -->
 
-  <h2> <u>Ultimas Rentas</u></h2>
   {% if rentas %}
   <div class="content">
+    <div style="font-weight: bold;" class="col-12 alert alert-success" role="alert">
+      Rentas Disponibles.! <i class="bi bi-house"></i>
+    </div>
     {% for renta in rentas %}
-  
-    <div class="col-12">
-
-      <legend style="align-content: center;"><i class="bi bi-house"></i> Info. Renta.</legend>
+    <div class="col-12 " >
       <!--Inicia acordeon de renta individual-->
-      <div class="accordion" id="accordionExample">
-
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+      <div class="accordion " id="accordionExample">
+        <div class="accordion-item " >
+          <h2 class="accordion-header ">
+            <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
               data-bs-target="#{{renta.renta__id}}" aria-expanded="false" aria-controls="{{renta.renta__id}}">
 
               <!--Frente Acordeon-->
-              <span style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a class="u-condition  rounded-pill"
+              <span class="alert alert-success" style="margin: 4px;"><i class="bi bi-house"></i> Local:</span> <a class="u-condition  rounded-pill"
                 target="_parent" href="{% url 'rentapp:detail' renta.renta__id %}"> {{ renta.renta__direccion }}</a>
 
             </button>
           </h2>
           <div id="{{renta.renta__id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div  style="background-color: rgb(239, 244, 244);" class="accordion-body">
+              {% if renta.image_renta != "" %}
               <div>
                 <a target="_parent" href="../media/{{ renta.image_renta }}">
                   <img
@@ -207,6 +205,7 @@
                     alt="../media/{{ renta.name_foto_renta }}" />
                 </a>
               </div>
+              {% endif %}
               <dl style="font-size: 24px;" >
                 <dt><i class="bi bi-house">Local:</i></dt>
                 <dd><a class="u-condition  rounded-pill" target="_parent" href="{% url 'rentapp:detail' renta.renta__id %}">

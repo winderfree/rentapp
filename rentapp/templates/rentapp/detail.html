@@ -74,7 +74,7 @@
     {% endif %}
     <!-- Contacto -->
     <div style="font-size: 42px;" >
-      <a href="../insertar_mensaje/" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
+      <a href="{% url 'chat:room' renta_location.id %}" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
           title="Contactar con Rentador."></i></a>
       <a target="_parent" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i>
       </a>

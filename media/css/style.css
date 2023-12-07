@@ -10,10 +10,11 @@
     border-radius: 0px;
   }
   legend {
-    color: aliceblue;
+    color: #198754;
     width: 100%;
-    font-size: 18px;
-    background-color: rgb(22, 12, 214);
+    font-size: 24px;
+    font-weight: bolder;
+    background-color: rgb(238, 238, 244);
   }
 
   fieldset {
@@ -26,9 +27,25 @@
 
   .u-condition {
     font-size: small;
-    color: #0b5ed7;
+    color: #262d2a;
   }
-
+  /*#a3cfbb*/
+  .accordion-button:focus {
+    z-index: 3;
+    border-color:#a3cfbb;
+  }
+  .accordion-button {
+    z-index: 3;
+    border-color:#a3cfbb;
+  }
+  .accordion-button:not(.collapsed) {
+    color: var(--bs-accordion-active-color);
+    background-color: #17b16c;
+  }
+  .accordion-button:not(.collapsed) {
+    color: #a4c7b0;
+    background-color: #a3cfbb;
+}
   .input-group-text{
     color: rgb(53, 40, 233) ;
     background-color: #e4e8ee;

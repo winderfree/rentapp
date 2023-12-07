@@ -38,7 +38,6 @@ def insertar_mensaje(request):
         form = MensajeForm()
     return render(request, 'rentapp/insertar_mensaje.html', {'form': form, })
 
-
 def insertar_mensaje_rendatario(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -63,7 +62,6 @@ def insertar_mensaje_rendatario(request):
         # print (datos)
         form = MensajeForm()
     return render(request, 'rentapp/insertar_mensaje_rendatario.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
-
 
 def insertar_amistad(request, usertario_id, userdador_id, renta_id):
     existe_amistad = Amistad.objects.filter(usertario=usertario_id,userdador=userdador_id, renta=renta_id).values_list()
@@ -129,7 +127,8 @@ def insertar_usertario(request):
                 username = form.cleaned_data['username'],
                 password = form.cleaned_data['password'],
                 email = form.cleaned_data['email'],
-                tipo = 'usertario')
+                tipo = 'usertario',
+                categoria = form.cleaned_data['categoria'])
             user.set_password(form.cleaned_data['password'])
             user.save()
 
@@ -139,7 +138,6 @@ def insertar_usertario(request):
         #datos = list(Usertario.objects.values().order_by("-id"))
         form = UsertarioForm()
     return render(request, 'rentapp/insertar_usertario.html', {'form': form, 'ver_usertarios':ver_usertarios,})
-
 
 def insertar_foto(request, renta_id):
     datos_fotos = list(Foto.objects.filter(renta=renta_id).order_by("-id"))
@@ -210,14 +208,15 @@ def insertar_renta(request):
     return render(request, 'rentapp/insertar_renta.html', {'form': form})
 
 def index(request):
-    fotos_rentas = Foto.objects.all().select_related('renta') \
-      .values('renta__usertario', 'renta__id', 'renta__direccion',
-                    'id', 'image_renta', 'name_foto_renta').order_by('-id')
+    fotos_rentas = list(Foto.objects.all().select_related('renta').values(
+        'renta__usertario', 'renta__id', 'renta__direccion',
+        'id', 'image_renta', 'name_foto_renta').order_by('-id'))
     p = Paginator(fotos_rentas, 4)
     page = request.GET.get('page')
     rentas = p.get_page(page)
 
     context = {
+        "fotos_rentas":fotos_rentas,
         "rentas": rentas,
     }
     return render(request, "rentapp/index.html", context)
@@ -258,18 +257,11 @@ def buscar(request):
         return response
 
 def prueba(request, userdador_id):
-    # prueba = Foto.objects.all().select_related('renta') \
-    #   .values_list('renta__id', 'renta__direccion',
-    #                 'id', 'image_renta', 'name_foto_renta')
-    #pubs = publication.objects.select_related('country', 'country_state', 'city')
-    # amistad, amistad_id, id, pub_date, texto, tipo
-    mensaje_amistad = Mensaje.objects.select_related('amistad').values('amistad')
-    # id, mensaje, pub_date, relacion, userdador, userdador_id, usertario, usertario_id
-    amistad = Amistad.objects.filter(userdador=userdador_id).values("id", 'pub_date', 'relacion', 'userdador', 'usertario',)
-    # prueba_2 = Foto.
-    # If you don't specify fields, you will get fields of Table2 only.
-    # lista_Renta_Usertario = list(Renta.objects.all().select_related('usertario').values_list('id', 'direccion', 'usertario__id','usertario__username','usertario__email','usertario__tipo','usertario__categoria'))
-    # lista_Renta_Usertario = "fdnfdjhfkdhfkdk"
-    result = [x for x in amistad]
+
+    # amistad_userdador = Amistad.objects.filter(userdador = userdador_id).select_related('renta','usertario','userdador').values(
+    #     'renta', 'userdador', 'usertario').order_by('-id')    # id, mensaje, pub_date, relacion, userdador, userdador_id, usertario, usertario_id
+    # # amistad = Amistad.objects.filter(userdador=userdador_id).values("id", 'pub_date', 'relacion', 'userdador', 'usertario',)
+    datos_amistad = Amistad.objects.values().order_by("-id")
+    result = [x for x in datos_amistad]
     return  HttpResponse(f"Resultados: {result}----" )
 

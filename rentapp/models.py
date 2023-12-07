@@ -5,16 +5,10 @@ class Usertario(User, models.Model):
     class Meta:
         db_table = "Usertario"
     
-    CATEGORIA_CHOICES = [
-        ("propietario", "Propietario"),
-        ("abogado", "Abogado"),
-        ("empresa", "Empresa o Compañia"),
-    ]
     tipo = models.CharField(max_length=24, null=True )
     categoria = models.CharField(
         max_length=24,
-        choices = CATEGORIA_CHOICES,
-        default = "propietario",
+        # default = "propietario",
     )
     def __str__(self):
         return f'({self.username}-{self.categoria})'
