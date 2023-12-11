@@ -2,8 +2,9 @@
 
 {% block title %}<title>Rentapp - Details</title>{% endblock %}
 
-{% block content %}
+{% block customcards %}{% endblock %}
 
+{% block content %}
 <div class="container">
   <h1>Rentapp</h1>
 
@@ -61,16 +62,11 @@
     </div>
     {% if fotos %}
     <div class="fotos">
-
       {% for foto in fotos %}
-
       <a target="_blank" href="{{ foto.image_renta.url }}"><img class="imagen_renta" src="{{ foto.image_renta.url }}"
           alt="image_renta" /></a>
-
       {% endfor %}
-
     </div>
-
     {% endif %}
     <!-- Contacto -->
     <div style="font-size: 42px;" >

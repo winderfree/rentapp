@@ -9,21 +9,9 @@
     border: 5px solid; 
     border-radius: 0px;
   }
-  legend {
-    color: #198754;
-    width: 100%;
-    font-size: 24px;
-    font-weight: bolder;
-    background-color: rgb(238, 238, 244);
-  }
 
-  fieldset {
-    text-align: center;
-    align-content: center;
-    margin: 3px;
-    padding: 2px;
-    border: 1px solid rgb(89, 43, 226);
-  }
+
+
 
   .u-condition {
     font-size: small;

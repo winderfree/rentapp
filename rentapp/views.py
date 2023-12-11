@@ -208,10 +208,12 @@ def insertar_renta(request):
     return render(request, 'rentapp/insertar_renta.html', {'form': form})
 
 def index(request):
-    fotos_rentas = list(Foto.objects.all().select_related('renta').values(
-        'renta__usertario', 'renta__id', 'renta__direccion',
-        'id', 'image_renta', 'name_foto_renta').order_by('-id'))
-    p = Paginator(fotos_rentas, 4)
+    rentas = list(Renta.objects.all().values().order_by('-id'))
+    fotos_rentas = list(Foto.objects.all().values().order_by('-id'))
+    # fotos_rentas = list(Foto.objects.all().select_related('renta').values(
+    #     'renta__usertario', 'renta__id', 'renta__direccion',
+    #     'id', 'image_renta', 'name_foto_renta').order_by('-id'))
+    p = Paginator(rentas, 4)
     page = request.GET.get('page')
     rentas = p.get_page(page)
 
@@ -256,12 +258,13 @@ def buscar(request):
         response = render(request, "rentapp/buscar.html", context )
         return response
 
-def prueba(request, userdador_id):
+def prueba(request):
 
     # amistad_userdador = Amistad.objects.filter(userdador = userdador_id).select_related('renta','usertario','userdador').values(
     #     'renta', 'userdador', 'usertario').order_by('-id')    # id, mensaje, pub_date, relacion, userdador, userdador_id, usertario, usertario_id
     # # amistad = Amistad.objects.filter(userdador=userdador_id).values("id", 'pub_date', 'relacion', 'userdador', 'usertario',)
-    datos_amistad = Amistad.objects.values().order_by("-id")
-    result = [x for x in datos_amistad]
-    return  HttpResponse(f"Resultados: {result}----" )
+    rentas = list(Renta.objects.all().values())
+    fotos_rentas = list(Foto.objects.all().values())
+
+    return  HttpResponse(f"rentas: {rentas}----Fotos:{fotos_rentas}" )
 

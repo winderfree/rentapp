@@ -5,7 +5,7 @@ app_name = 'rentapp'
 
 urlpatterns = [
     # prueba url
-    path('prueba/<int:userdador_id>', views.prueba, name='prueba'),
+    path('prueba/', views.prueba, name='prueba'),
     # ex: /rentapp/
     path('', views.index, name='index'),
     # ex: /rentapp/2/

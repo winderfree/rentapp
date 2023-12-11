@@ -137,6 +137,6 @@ MEDIA_URL = '/media/'
 #GOOGLE_SSO_CLIENT_SECRET = "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"
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/rentapp'
 # Esto registra en la consola cualquier envío de correo electrónico (y así puedes copiar el enlace de reinicio de contraseña desde dicha consola).
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
