@@ -26,6 +26,10 @@ urlpatterns = [
     path('insertar_mensaje/', views.insertar_mensaje, name='insertar_mensaje'),
     # ex: /rentapp/insertar_mensaje_rendatario/
     path('insertar_mensaje_rendatario/', views.insertar_mensaje_rendatario, name='insertar_mensaje_rendatario'),
+    # ex: /rentapp/dashboard
+    path('dashboard_rendatario/<int:id_rendatario>', views.dashboard_rendatario, name='dashboard_rendatario'),
+    # ex: /rentapp/delete
+    path('delete_renta/<int:id_renta>-<int:usertario>', views.delete_renta, name='delete_renta' ),
     # logout_user
     path(' ', views.logout_user, name='logout_user'),
 

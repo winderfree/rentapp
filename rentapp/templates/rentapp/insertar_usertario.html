@@ -8,24 +8,21 @@
 </div>
 {% endblock %}
 {% block content %}
-<h1>Rentapp - Add Usertario</h1>
+<h1>Rentapp - Nuevo Rendatario</h1>
 <div class="row">
     <div class="content">
-
-   
-
             <form class="row g-3 was-validated" action="{% url 'rentapp:insertar_usertario' %}" method="post">
             {% csrf_token %}
             <div class="col-md-12">
-                <label for="inputUsername" class="form-label">{{ form.username.errors}}{{ form.username.label}}</label>
+                <label for="inputUsername" class="form-label">{{ form.username.errors}} Nombre </label>
                 <input autofocus name="username" id="inputUsername" class="form-control" type="text" placeholder="Username deseado" aria-label="default input example" required>
             </div> 
             <div class="col-md-12">
-                <label for="exampleFormControlInputemail" class="form-label">Email address</label>
+                <label for="exampleFormControlInputemail" class="form-label"> Email</label>
                 <input name="email" type="email" class="form-select" id="exampleFormControlInputemail"  required>
             </div>
             <div class="col-md-12">
-                <label for="exampleFormControlInputCategoria" class="form-label">Categoria</label>
+                <label for="exampleFormControlInputCategoria" class="form-label">Tipo Rendatario</label>
                 <select name="categoria" id="id_categoria" class="form-select" aria-label="select example" required>
                     <option value="">-Selecciona Categoria-</option>
 

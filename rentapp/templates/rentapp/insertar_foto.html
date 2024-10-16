@@ -1,33 +1,20 @@
 {% extends "base_generic.html" %}
-{% block title %}<title>Rentapp - Nueva Foto</title>{% endblock %}
+{% block title %}<title>Rentapp - add Foto</title>{% endblock %}
 
 {% block content %}
-<h1>Rentapp - Add Fotos</h1>
 
 <div class="row">
-    <div class="content">
-        <fieldset>
-            <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
-            <legend>¿Rentar?</legend>
-            <p>
-                Registrate para poder contactar con
-                los rentadores.</p>
-        </fieldset>
-    </div>
     
     <div class="content">
         <fieldset>
-            <legend class="bi bi-images"> Add Photo.</legend>
-            {{ renta_id }}
+            <h3>Add Foto</h3>
             <!-- {{ renta_title.direccion }} -->
             {% for x in renta_title %}
-            {{ x.direccion }}
+            <legend class="bi bi-images"> <u>{{ x.direccion }}</u>.</legend>
             {%endfor%} 
             <form action="{% url 'rentapp:insertar_foto' renta_id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 <div class="input-group flex-nowrap">
-                    
                     <div class="input-group flex-nowrap">
                         <input hidden name="renta" value="{{ renta_id }}" type="text">
                         {{ form.usertario.errors }}
@@ -46,18 +33,25 @@
                     {{ form.name_foto_renta.errors }}
                     {{ form.name_foto_renta }}
                 </div>
+                <div class="input-group flex-nowrap">
 
-                <input class="btn btn-primary" type="submit" value="Submit" />
+                    <input class="btn btn-primary" type="submit" value="Subir Foto" />
+                    <a href="{% url 'rentapp:dashboard_rendatario' user.id %}">
+                        <input class="btn btn-secondary" type="" value="Dashboard" />
+                    </a>
+                </div>
             </form>
         </fieldset>
     </div>
 </div>
 <p> 
     {% for x in datos_fotos%}
-    {{x.renta}}-<img style="width: 36px; height: 36px;" src="/media/{{x.image_renta}}" alt="imagen-{{x.id}}">
+    <p>
+        <img style="width: 50px; height: 50px;" src="/media/{{x.image_renta}}" alt="imagen-{{x.id}}">
+    </p>
     {% endfor %}
 </p>
-<p>{{renta_id}}</p>
+<!-- <p>{{renta_id}}</p> -->
 {% endblock %}
 
 {% block pagination %}{% endblock %}

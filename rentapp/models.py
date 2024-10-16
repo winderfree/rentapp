@@ -11,7 +11,7 @@ class Usertario(User, models.Model):
         # default = "propietario",
     )
     def __str__(self):
-        return f'({self.username}-{self.categoria})'
+        return f'{self.username}-{self.categoria}'
     
 class Userdador(User, models.Model):
     class Meta:
@@ -35,7 +35,7 @@ class Renta(models.Model):
 
     # q = Question(question_text="What's new?", pub_date=timezone.now())
     def __str__(self):
-        return f'{self.direccion}'
+        return f'{int(self.id)}'
 
 class Amistad(models.Model):
     renta = models.ForeignKey(Renta, on_delete=models.CASCADE, null=True)
@@ -60,9 +60,7 @@ class Mensaje(models.Model):
     
     def __str__(self):
         return f"{self.amistad}"
-    
-
-    
+      
 class Foto(models.Model):
     renta = models.ForeignKey(Renta, on_delete=models.CASCADE)
     image_renta = models.ImageField(upload_to='gallery', default='gallery/static/images/no-img.jpg')

@@ -38,7 +38,7 @@
 
       <nav class="navbar bg-body-tertiary fixed-top">
         <div class="container-fluid">
-          <a class="navbar-brand bi-house" href="/rentapp/"></a>
+          <a class="navbar-brand bi-house" href="{% url 'rentapp:index' %}"></a>
           {% if not user.is_authenticated %}
           <a href="{% url 'login' %}" class="btn btn-primary" type="button">Inicia seción</a>
           {% endif %}
@@ -49,7 +49,7 @@
           <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Rentapp</h5>
+              <a href="{% url 'rentapp:index' %}" class="offcanvas-title" id="offcanvasNavbarLabel">Rentapp</a>
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -57,21 +57,24 @@
                 <li class="nav-item">
                   <a style="font-size: 24px;color: #198754;" class="" href="/rentapp/"><i
                       style="font-size: 43px;color: #198754;" class="bi bi-house"></i></a>
-                  <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  <a class="nav-link active" aria-current="page" href="{% url 'rentapp:index' %}" >Home</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#">Link</a>
                 </li> -->
                 {% if user.is_authenticated %}
-
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle bi bi-menu-app-fill" href="#" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     Menú
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">
-                      <i class="bi-dashboard "></i> Dashboard</a></li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'rentapp:dashboard_rendatario' user.id %}">
+                        <i class="bi-dashboard "></i> 
+                        Dashboard
+                      </a>
+                    </li>
                     <li><a class="dropdown-item" href="/rentapp/insertar_renta/"><i class="bi-plus-square-fill"></i>
                         Nueva Renta</a></li>
                     <li><a class="dropdown-item" href="#">
@@ -124,7 +127,7 @@
       <!--Saludos-->
       {% block saludos %}
       <div class="alert alert-warning alert-dismissible fade show " role="alert">
-        <strong>Bienvenido.</strong> Aquí encuentras la renta que buscas desde tu PC o Dispositivos mobiles.
+        <h3>RentAppBlabla.</h3>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       {% endblock %}
@@ -132,20 +135,7 @@
       <!--custom cards-->
       {% if not user.is_authenticated %}
       {% block customcards %}
-      <!-- <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i
-                class="bi bi-door-open-fill"></i>
-            Sign'Rendador'</a>
-    </dd>
-    <dd>
-        <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i
-                class="bi bi-door-open-fill"></i>
-            Sign'Rendatario'</a>
-    </dd>
-    <dd>
-        <a href="{% url 'login'%}?next={{request.path}}"><i
-                class="bi bi-door-open-fill"></i>
-            Iniciar sesión</a>
-    </dd> -->
+    
       <div class="row  col-12 align-items-stretch g-2 ">
 
         <div class="col-sm-6 col-md-6 col-lg-4">
@@ -259,8 +249,9 @@
         {% block content %}{% endblock %}
 
         {% block pagination %}
-        <p>{{ rentas.number }} of {{rentas.paginator.num_pages }}</p>
         <nav aria-label="Page navigation example">
+          <p>{{ rentas.number }} of {{rentas.paginator.num_pages }}</p>
+
           <ul class="pagination">
             {% if rentas.has_previous %}
             <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primera</a></li>

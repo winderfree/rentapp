@@ -178,8 +178,9 @@ def insertar_renta(request):
             #num_calle = form.cleaned_data['direccion']
             #direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, DO."
             direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, {municipio_nombre[1]}, {provincia_nombre[1]}, República Dominicana"
-            geolocator = Nominatim(user_agent="rentapp", timeout=10)
-            location = geolocator.geocode(direccion_full)
+            # geolocator = Nominatim(user_agent="rentapp", timeout=10)
+            # location = geolocator.geocode(direccion_full)
+            location = ""
 
             # process the data in form.cleaned_data as required
             # ...
@@ -228,8 +229,9 @@ def detail(request, renta_id):
     try:
         fotos = Foto.objects.filter(renta=renta_id)
         renta_location = Renta.objects.get(pk=renta_id)
-        geolocator = Nominatim(user_agent="rentapp", timeout=10)
-        location = geolocator.geocode(renta_location.direccion)
+        # geolocator = Nominatim(user_agent="rentapp", timeout=10)
+        # location = geolocator.geocode(renta_location.direccion)
+        location = ""
 
     except Exception as e:
        return HttpResponse(f'ahora si :{e}' )
@@ -257,6 +259,20 @@ def buscar(request):
         }
         response = render(request, "rentapp/buscar.html", context )
         return response
+
+def dashboard_rendatario(request, id_rendatario):
+    rentas = Renta.objects.all().filter(usertario=id_rendatario).order_by('-id')
+    print(rentas)
+    context = {
+        "rentas": rentas,
+    }
+    return render(request, "rentapp/dashboard.html", context)
+
+def delete_renta(request, id_renta, usertario):
+    renta = Renta.objects.filter(id=id_renta)
+    renta.delete()
+    return HttpResponseRedirect(f"../dashboard_rendatario/{usertario}")
+
 
 def prueba(request):
 

@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block title %} <title>Dashboard</title> {% endblock %}
+
+{% block content %} 
+
+<h3>contenido Dashboard aquí</h3>
+
+<a class="btn btn-primary" href="{% url 'rentapp:insertar_renta' %}" target="_self" rel="noopener noreferrer">Nueva Renta</a>
+
+<p>Crear CRUD</p>
+{% for renta in rentas %}
+    <div style="border: 2px solid black; padding: 10px; margin: 10px;">
+        <ul>
+            <li>
+                {{ renta.usertario|title }}
+            </li>
+            <li>
+                {{ renta.direccion|title }}
+            </li>
+            <li>
+                {{ renta.referencia|title }}
+            </li>
+        </ul>
+      <div>
+        <a class="btn btn-primary" href="http://" target="_blank" rel="noopener noreferrer">Editar</a>
+        <a class="btn btn-secondary" href="{% url 'rentapp:delete_renta' renta.id renta.usertario.id %}" target="_self" rel="noopener noreferrer">Borrar</a>
+      </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

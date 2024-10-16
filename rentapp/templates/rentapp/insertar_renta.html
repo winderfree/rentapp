@@ -2,7 +2,6 @@
 {% block title %} <title>Rentapp - Nueva Renta</title> {% endblock %}
 
 {% block content %}
-<h1>Rentapp - Nueva</h1>
 
 <style>
     .select-hidden {
@@ -16,9 +15,7 @@
 
 
 <div class="row">
-    <div class="content">
-
-
+    <!-- <div class="content">
         <fieldset>
             <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
             <legend>¿Rentar?</legend>
@@ -26,7 +23,7 @@
                 Registrate para poder contactar con
                 los rentadores.</p>
         </fieldset>
-    </div>
+    </div> -->
     <div>
         <fieldset>
 
@@ -36,7 +33,7 @@
                 <!--usertario form-->
 
                 <div class="input-group flex-nowrap">
-                    <input name="usertario" value="{{user.id}}" type="text">
+                    <input hidden name="usertario" value="{{user.id}}" type="text">
                     {{ form.usertario.errors }}
                 </div>
                 <!--dirección form-->
