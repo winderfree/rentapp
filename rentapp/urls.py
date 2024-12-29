@@ -9,7 +9,7 @@ urlpatterns = [
     # ex: /rentapp/
     path('', views.index, name='index'),
     # ex: /rentapp/2/
-    path('<int:renta_id>/', views.detail, name='detail'),
+    path('<int:renta_id>', views.detail, name='detail'),
     # ex: /rentapp/"direccion"/
     path('buscar/', views.buscar, name='buscar'),
     # ex: /rentapp/insertar_renta/
@@ -26,12 +26,16 @@ urlpatterns = [
     path('insertar_mensaje/', views.insertar_mensaje, name='insertar_mensaje'),
     # ex: /rentapp/insertar_mensaje_rendatario/
     path('insertar_mensaje_rendatario/', views.insertar_mensaje_rendatario, name='insertar_mensaje_rendatario'),
-    # ex: /rentapp/dashboard
+    # ex: /rentapp/dashboard usertario
     path('dashboard_rendatario/<int:id_rendatario>', views.dashboard_rendatario, name='dashboard_rendatario'),
+    # ex: /rentapp/dashboard userdador
+    path('dashboard_rendador/<int:id_rendador>', views.dashboard_rendador, name='dashboard_rendador'),
     # ex: /rentapp/delete
     path('delete_renta/<int:id_renta>-<int:usertario>', views.delete_renta, name='delete_renta' ),
     # logout_user
     path(' ', views.logout_user, name='logout_user'),
+    # login
+    # path(' ', views.login_user, name='login_user'),
 
     # Nothing yet!
     # path('image_rentapp/', views.image_rentapp, name='image_rentapp'),

@@ -1,19 +1,36 @@
 import time
-from asgiref.sync import sync_to_async
-import asyncio
+# from asgiref.sync import sync_to_async
+# import asyncio
 from django.core.paginator import Paginator
-from geopy.geocoders import Nominatim
-from django.shortcuts import render
+# from geopy.geocoders import Nominatim
+from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+
+# def login_user(request):
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             # redirect to a success page.
+#             return HttpResponseRedirect("/")
+
+#         else:
+#             #returns an 'invalid login' error message
+#             messages.success(request, ("There Was An Error Login IIN, Try Again"))
+#             return redirect('login_user')
+#     else:
+#         return render(request, "/", {})
 
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect('/rentapp')
+    return HttpResponseRedirect('/')
 
 def insertar_mensaje(request):
     # if this is a POST request we need to process the form data
@@ -115,29 +132,29 @@ def insertar_userdador(request):
 
     return render(request, 'rentapp/insertar_userdador.html', {'mensajes':mensajes,'form': form})
 
-def insertar_usertario(request):
-    ver_usertarios = Usertario.objects.all()
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = UsertarioForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            user = Usertario(
-                username = form.cleaned_data['username'],
-                password = form.cleaned_data['password'],
-                email = form.cleaned_data['email'],
-                tipo = 'usertario',
-                categoria = form.cleaned_data['categoria'])
-            user.set_password(form.cleaned_data['password'])
-            user.save()
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from .models import Usertario
+from .forms import UsertarioForm
 
-            return HttpResponseRedirect('/rentapp/insertar_renta/')
-    # if a GET (or any other method) we'll create a blank form
+def insertar_usertario(request):
+    # Obtener todos los usertarios para mostrarlos en la página
+    ver_usertarios = Usertario.objects.all()
+
+    # Si se recibe una solicitud POST, procesar los datos del formulario
+    if request.method == 'POST':
+        form = UsertarioForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)  # Crear el objeto Usertario sin guardar aún
+            user.tipo = 'usertario'  # Asignar el valor al campo 'tipo'
+            user.set_password(form.cleaned_data['password'])  # Encriptar la contraseña
+            user.save()  # Guardar el objeto Usertario en la base de datos
+            return redirect('insertar_renta')  # Redirigir a la URL especificada después de guardar
     else:
-        #datos = list(Usertario.objects.values().order_by("-id"))
-        form = UsertarioForm()
-    return render(request, 'rentapp/insertar_usertario.html', {'form': form, 'ver_usertarios':ver_usertarios,})
+        form = UsertarioForm()  # Crear un formulario en blanco para una solicitud GET
+
+    # Renderizar la plantilla con el formulario y la lista de usertarios
+    return render(request, 'rentapp/insertar_usertario.html', {'form': form, 'ver_usertarios': ver_usertarios})
 
 def insertar_foto(request, renta_id):
     datos_fotos = list(Foto.objects.filter(renta=renta_id).order_by("-id"))
@@ -157,7 +174,7 @@ def insertar_foto(request, renta_id):
             # obj = Foto.objects.latest('renta')
             # renta_id = obj
             # redirect to a new URL:
-            return HttpResponseRedirect(f'/rentapp/insertar_foto/{renta_id}')
+            return HttpResponseRedirect(f'/insertar_foto/{renta_id}')
     # if a GET (or any other method) we'll create a blank form
     else:
         # obj = Foto.objects.latest('renta')
@@ -202,7 +219,7 @@ def insertar_renta(request):
             # obj = Amistad.objects.latest('id')
 
             # redirect to a new URL:
-            return HttpResponseRedirect(f'/rentapp/insertar_foto/{renta_id.id}')
+            return HttpResponseRedirect(f'/insertar_foto/{renta_id.id}')
     # if a GET (or any other method) we'll create a blank form
     else:
         form = RentaForm()
@@ -223,7 +240,7 @@ def index(request):
         "rentas": rentas,
     }
     return render(request, "rentapp/index.html", context)
-
+@login_required
 def detail(request, renta_id):
 
     try:
@@ -260,10 +277,31 @@ def buscar(request):
         response = render(request, "rentapp/buscar.html", context )
         return response
 
+def quien_es():
+    pass
+
 def dashboard_rendatario(request, id_rendatario):
+    quien_es = Usertario.objects.all().filter(id=id_rendatario).values("tipo")[0]['tipo']
+    # tener todas las rentas del usuario
     rentas = Renta.objects.all().filter(usertario=id_rendatario).order_by('-id')
+    # user_app = User.objects.all().filter(usertario=id_rendatario).order_by('-id')
+    print(quien_es)
     print(rentas)
     context = {
+        "quien_es": quien_es,
+        "rentas": rentas,
+    }
+    return render(request, "rentapp/dashboard.html", context)
+
+def dashboard_rendador(request, id_rendador):
+    quien_es = Userdador.objects.all().filter(id=id_rendador).values("tipo")[0]['tipo']
+    # tener todas las rentas del usuario
+    rentas = Renta.objects.all().filter(userdador=id_rendador).order_by('-id')
+    # user_app = User.objects.all().filter(usertario=id_rendatario).order_by('-id')
+    print(quien_es)
+    print(rentas)
+    context = {
+        "quien_es": quien_es,
         "rentas": rentas,
     }
     return render(request, "rentapp/dashboard.html", context)

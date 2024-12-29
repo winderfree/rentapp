@@ -13,39 +13,26 @@
     }
 </style>
 
-
-<div class="row">
-    <!-- <div class="content">
-        <fieldset>
-            <u class="u-condition">Completa este formulario, y empieza a usar nuestros servicios.</u>
-            <legend>¿Rentar?</legend>
-            <p>
-                Registrate para poder contactar con
-                los rentadores.</p>
-        </fieldset>
-    </div> -->
-    <div>
-        <fieldset>
-
-            <legend class="bi-plus-square-fill"> Nueva Renta.</legend>
-            <form action="{% url 'rentapp:insertar_renta' %}" method="post">
-                {% csrf_token %}
-                <!--usertario form-->
-
-                <div class="input-group flex-nowrap">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <fieldset class="border p-4 rounded">
+                <legend class="bi-plus-square-fill"> Nueva Renta</legend>
+                <form action="{% url 'rentapp:insertar_renta' %}" method="post">
+                    {% csrf_token %}
+                    <!--usertario form-->
                     <input hidden name="usertario" value="{{user.id}}" type="text">
                     {{ form.usertario.errors }}
-                </div>
-                <!--dirección form-->
 
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">{{ form.direccion.label_tag }}
-                    </span>
+                    <!--dirección form-->
+                    <div class="form-floating mb-3">
+                        {{ form.direccion }}
+                        <label for="id_direccion">{{ form.direccion.label }}</label>
+                        {{ form.direccion.errors }}
+                    </div>
 
-                    {{ form.direccion.errors }}
-                    {{ form.direccion }}
-
-                </div>
+                    <!--provincia, municipio, sector form-->
+                   
                 <div style="margin:10px 10px 10px 10px;" class=" flex-nowrap">
 
                     <select onchange="getId()" id="provincia" name="provincia" required></select>
@@ -55,20 +42,23 @@
 
                     <select class="select-hidden" id="sector" name="sector"></select>
                 </div>
-                <!--referencia form-->
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">{{ form.referencia.label_tag }}
-                    </span>
-                    {{ form.referencia.errors }}
-                    {{ form.referencia }}
-                </div>
-                <div>
-                    <input class="btn btn-primary" type="submit" value="Submit">
-                </div>
-            </form>
-        </fieldset>
+
+                    <!--referencia form-->
+                    <div class="form-floating mb-3">
+                        {{ form.referencia }}
+                        <label for="id_referencia">{{ form.referencia.label }}</label>
+                        {{ form.referencia.errors }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
     </div>
 </div>
+
 <script>
     function getIdSector() {
         const idMunicipio = document.getElementById('municipio').value;

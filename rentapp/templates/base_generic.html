@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  {% block title %}<title>Rentapp</title>{% endblock %}
+  {% block title %}<title>RentAventa</title>{% endblock %}
 
   <!-- Iconos de Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
@@ -32,259 +32,225 @@
 
 <body>
   <div class="container-fluid">
-    {% block page_name %}<h1><i style="color: #198754;" class="bi bi-house">RentApp</i></h1>{% endblock %}
-    <div class="row">
-      <!--navbar-->
-
-      <nav class="navbar bg-body-tertiary fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand bi-house" href="{% url 'rentapp:index' %}"></a>
-          {% if not user.is_authenticated %}
-          <a href="{% url 'login' %}" class="btn btn-primary" type="button">Inicia seción</a>
-          {% endif %}
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-            aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-            aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-              <a href="{% url 'rentapp:index' %}" class="offcanvas-title" id="offcanvasNavbarLabel">Rentapp</a>
-              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                  <a style="font-size: 24px;color: #198754;" class="" href="/rentapp/"><i
-                      style="font-size: 43px;color: #198754;" class="bi bi-house"></i></a>
-                  <a class="nav-link active" aria-current="page" href="{% url 'rentapp:index' %}" >Home</a>
-                </li>
-                <!-- <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li> -->
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle bi bi-menu-app-fill" href="#" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Menú
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a class="dropdown-item" href="{% url 'rentapp:dashboard_rendatario' user.id %}">
-                        <i class="bi-dashboard "></i> 
-                        Dashboard
+    <div class="row col-12 align-items-stretch g-2">
+      <!--Header-->
+      {% block header %}
+      <header class="col-12">
+        <h1 class="display-1">RentAventa</h1>
+        <p class="lead">Renta, compra y venta.</p>
+        <!--navbar-->
+        <nav class="navbar bg-body-tertiary fixed bg-transparent">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'rentapp:index' %}">
+              <img class="rounded-circle" src="/media/gallery/rentapp_logo.png" alt="logo" width="50">
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn btn-primary ms-3" type="button">Inicia sesión</a>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+              aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+              aria-labelledby="offcanvasNavbarLabel">
+              <div class="offcanvas-header">
+                <a href="{% url 'rentapp:index' %}" class="offcanvas-title" id="offcanvasNavbarLabel">RentAventa</a>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li class="nav-item">
+                    <a class="nav-link active d-flex align-items-center" aria-current="page"
+                      href="{% url 'rentapp:index' %}">
+                      <img class="rounded-circle img-thumbnail w-25 p-3" src="/media/gallery/rentapp_logo.png"
+                        alt="Home-logo"></i>
+                      <span class="ms-2">Home</span>
+                    </a>
+                  </li>
+                  {% if user.is_authenticated %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-menu-app-fill" style="font-size: 24px;"></i>
+                      <span class="ms-2">Menú</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center"
+                          href="{% url 'rentapp:dashboard_rendatario' user.id %}">
+                          <i class="bi bi-dashboard me-2"></i>
+                          Dashboard
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center" href="{% url 'rentapp:insertar_renta' %}">
+                          <i class="bi bi-plus-square-fill me-2"></i>
+                          Nueva Renta
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                          <i class="bi bi-envelope me-2"></i>
+                          Mensajes
+                        </a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center"
+                          href="{% url 'rentapp:logout_user'%}?next={{request.path}}">
+                          <i class="bi bi-door-closed-fill me-2"></i>
+                          Cerrar sesión
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  {% else %}
+                  <dl>
+                    <dt><code>Desactivo</code></dt>
+                    <dd>
+                      <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"
+                        class="d-flex align-items-center">
+                        <i class="bi bi-door-open-fill me-2"></i>
+                        Sign'Rendador'
                       </a>
-                    </li>
-                    <li><a class="dropdown-item" href="/rentapp/insertar_renta/"><i class="bi-plus-square-fill"></i>
-                        Nueva Renta</a></li>
-                    <li><a class="dropdown-item" href="#">
-                        <i class="bi-envelope "></i> Mensajes</a></li>
-                    
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'rentapp:logout_user'%}?next={{request.path}}"><i
-                          class="bi bi-door-closed-fill"></i>
-                        Cerrar sesión</a>
-                      <!-- <a class="dropdown-item" href="#">Something else here</a> -->
-                    </li>
-                  </ul>
-                </li>
-
-                {% else %}
-                <dl>
-                  <dt><code>Desactivo</code></dt>
-                  <dd>
-                    <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i
-                        class="bi bi-door-open-fill"></i>
-                      Sign'Rendador'</a>
-                  </dd>
-                  <dd>
-                    <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i
-                        class="bi bi-door-open-fill"></i>
-                      Sign'Rendatario'</a>
-                  </dd>
-                  <dd>
-                    <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
-                      Iniciar sesión</a>
-                  </dd>
-                  <dd><code>Aquí inicia sessión...</code></dd>
-
-                </dl>
-                {% endif %}
-
-              </ul>
-              <form class="d-flex mt-3" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
+                    </dd>
+                    <dd>
+                      <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"
+                        class="d-flex align-items-center">
+                        <i class="bi bi-door-open-fill me-2"></i>
+                        Sign'Rendatario'
+                      </a>
+                    </dd>
+                    <dd>
+                      <a href="{% url 'login'%}?next={{request.path}}" class="d-flex align-items-center">
+                        <i class="bi bi-door-open-fill me-2"></i>
+                        Iniciar sesión
+                      </a>
+                    </dd>
+                    <dd><code>Aquí inicia sesión...</code></dd>
+                  </dl>
+                  {% endif %}
+                </ul>
+                <form class="d-flex mt-3" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-
-      <!--Saludos-->
-      {% block saludos %}
-      <div class="alert alert-warning alert-dismissible fade show " role="alert">
-        <h3>RentAppBlabla.</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endblock %}
-
-      <!--custom cards-->
-      {% if not user.is_authenticated %}
-      {% block customcards %}
-    
-      <div class="row  col-12 align-items-stretch g-2 ">
-
-        <div class="col-sm-6 col-md-6 col-lg-4">
-          <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-            style="background-image: url('unsplash-photo-1.jpg');">
-            <div class="d-flex flex-column h-100 p-5 pb-1 text-white text-shadow-1">
-
-              <h3 class="pt-5 mt-5 mb-4 display-8 lh-1 fw-bold">¿Estas buscando Renta?</h3>
-              <p class="d-flex">
-              <h6> Trata con nosotros. </h6>
-              </p>
-              <!-- <p><a href="#">Sign in</a></p> -->
-              <p><button class="btn btn-primary">Regístrate</button></p>
-
-              <ul class="d-flex list-unstyled mt-auto">
-                <li class="me-auto">
-                  <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32"
-                    class="  border border-white">
-                </li>
-                <li class="d-flex align-items-center me-3">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#geo-fill" />
-                  </svg>
-                  <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i
-                      class="bi bi-door-open-fill"></i>
-                    <small>Crear cuenta.</small></a>
-                </li>
-                <li class="d-flex align-items-center">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#calendar3" />
-                  </svg>
-                  <small>3d</small>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-md-6 col-lg-4">
-          <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-            style="background-image: url('unsplash-photo-2.jpg');">
-            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-              <p>
-              <h3 class="pt-5 mt-5 mb-4 display-8 lh-1 fw-bold">¿Eres Propietario, Empresa o Abogado?</h3>
-              </p>
-              <p>Esta es una buena opción para publicar rentas diponibles</p>
-              <p><button class="btn btn-primary">Regístrate</button></p>
-              <ul class="d-flex list-unstyled mt-auto">
-                <li class="me-auto">
-                  <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32"
-                    class="rounded-circle border border-white">
-                </li>
-                <li class="d-flex align-items-center me-3">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#geo-fill" />
-                  </svg>
-                  <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i
-                      class="bi bi-door-open-fill"></i>
-                    <small>Crear cuenta</small></a>
-                </li>
-                <li class="d-flex align-items-center">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#calendar3" />
-                  </svg>
-                  <small>4d</small>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class=" col-md-12 col-lg-4">
-          <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
-            style="background-image: url('unsplash-photo-3.jpg');">
-            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-              <p>
-              <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Ya eres parte de la Familia?</h3>
-              </p>
-              <p>
-              <h4>Bienvenido de vuelta.</h4>
-              </p>
-              <p><button class="btn btn-primary">Inicia seción</button></p>
-              <ul class="d-flex list-unstyled mt-auto">
-                <li class="me-auto">
-                  <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32"
-                    class="rounded-circle border border-white">
-                </li>
-                <li class="d-flex align-items-center me-3">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#geo-fill" />
-                  </svg>
-                  <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
-                    <small>Iniciar sesión</small></a>
-                </li>
-                <li class="d-flex align-items-center">
-                  <svg class="bi me-2" width="1em" height="1em">
-                    <use xlink:href="#calendar3" />
-                  </svg>
-                  <small>5d</small>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endblock %}
-      {% endif %}
-      <!--block content-->
-      <div class="col-sm-12 ">
-
-        {% block content %}{% endblock %}
-
-        {% block pagination %}
-        <nav aria-label="Page navigation example">
-          <p>{{ rentas.number }} of {{rentas.paginator.num_pages }}</p>
-
-          <ul class="pagination">
-            {% if rentas.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primera</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{rentas.previous_page_number }}">Previous</a>
-            </li>
-
-            {% endif %}
-
-            {% if rentas.has_next %}
-
-            <li class="page-item"><a class="page-link" href="?page={{ rentas.next_page_number }}">Next</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="?page={{ rentas.paginator.num_pages }}">Última
-                &raquo</a></li>
-
-
-            {% endif %}
-          </ul>
         </nav>
-        <!--<p>Pagina {{ rentas.number }} of {{rentas.paginator.num_pages }}</p>-->
-
+        {% endblock %}
+        <!--Saludos-->
+        {% block saludos %}
+        <div class="row col-12 align-items-stretch g-2 ">
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Te saluda [RENTAPP]!</strong> You should check in on some of those fields below.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <!-- <div class="alert alert-warning alert-dismissible fade show row col-12 align-items-stretch g-2" role="alert">
+            <p>[RENTAPP] renta, compra y venta.</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div> -->
+        </div>
         {% endblock %}
 
 
-        {%block footer %}
-        <footer>WinderFree-Apps</footer>
-        {% endblock%}
+        <!--block content-->
+        <div class="col-sm-12">
+          {% block content %}
+          <!-- block for the content -->
+          {% endblock %}
 
-      </div>
 
+          {% block footer %}
+          <footer>WinderFree-Apps</footer>
+          <!--navbar-->
+          <nav class="navbar bg-body-tertiary fixed bg-transparent">
+            <div class="container-fluid  row col-12 align-items-stretch g-2">
 
+              <a class="navbar-brand" href="{% url 'rentapp:index' %}"><img class="rounded-circle"
+                  src="/media/gallery/rentapp_logo.png" alt="logo" width="50"></a>
+              {% if not user.is_authenticated %}
+              <a href="{% url 'login' %}" class="btn btn-primary" type="button">Inicia sesión</a>
+              {% endif %}
+              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                  <a href="{% url 'rentapp:index' %}" class="offcanvas-title" id="offcanvasNavbarLabel">Rentapp</a>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                      <a style="font-size: 24px;color: #198754;" class="" href="/rentapp/"><i
+                          style="font-size: 43px;color: #198754;" class="bi bi-house"></i></a>
+                      <a class="nav-link active" aria-current="page" href="{% url 'rentapp:index' %}">Home</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle bi bi-menu-app-fill" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Menú
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href="{% url 'rentapp:dashboard_rendatario' user.id %}">
+                            <i class="bi-dashboard"></i>
+                            Dashboard
+                          </a>
+                        </li>
+                        <li><a class="dropdown-item" href="/rentapp/insertar_renta/"><i class="bi-plus-square-fill"></i>
+                            Nueva Renta</a></li>
+                        <li><a class="dropdown-item" href="#">
+                            <i class="bi-envelope"></i> Mensajes</a></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="{% url 'rentapp:logout_user'%}?next={{request.path}}"><i
+                              class="bi bi-door-closed-fill"></i>
+                            Cerrar sesión</a>
+                        </li>
+                      </ul>
+                    </li>
+                    {% else %}
+                    <dl>
+                      <dt><code>Desactivo</code></dt>
+                      <dd>
+                        <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i
+                            class="bi bi-door-open-fill"></i>
+                          Sign'Rendador'</a>
+                      </dd>
+                      <dd>
+                        <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i
+                            class="bi bi-door-open-fill"></i>
+                          Sign'Rendatario'</a>
+                      </dd>
+                      <dd>
+                        <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
+                          Iniciar sesión</a>
+                      </dd>
+                      <dd><code>Aquí inicia sesión...</code></dd>
+                    </dl>
+                    {% endif %}
+                  </ul>
+                  <form class="d-flex mt-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </nav>
+          {% endblock %}
+        </div>
     </div>
-
   </div>
 </body>
 

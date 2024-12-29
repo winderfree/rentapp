@@ -1,19 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Usertario(User, models.Model):    
-    class Meta:
-        db_table = "Usertario"
-    
+class Usertario(User, models.Model): 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     tipo = models.CharField(max_length=24, null=True )
     categoria = models.CharField(
         max_length=24,
-        # default = "propietario",
-    )
+    # default = "propietario",
+    )  
+    class Meta:
+        db_table = "Usertario"
+    
     def __str__(self):
         return f'{self.username}-{self.categoria}'
-    
 class Userdador(User, models.Model):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     class Meta:
         db_table = "Userdador"
 

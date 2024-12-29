@@ -1,59 +1,52 @@
 {% extends "base_generic.html" %}
-{% block title %}<title>Rentapp - add Foto</title>{% endblock %}
+{% block title %}<title>Rentapp - Add Foto</title>{% endblock %}
 
 {% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <fieldset class="border p-4 rounded">
+                <h3 class="bi bi-images"> Add Foto</h3>
+                {% for x in renta_title %}
+                <legend class="text-center"><u>{{ x.direccion }}</u></legend>
+                {% endfor %}
+                <form action="{% url 'rentapp:insertar_foto' renta_id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input hidden name="renta" value="{{ renta_id }}" type="text">
+                    {{ form.usertario.errors }}
 
-<div class="row">
-    
-    <div class="content">
-        <fieldset>
-            <h3>Add Foto</h3>
-            <!-- {{ renta_title.direccion }} -->
-            {% for x in renta_title %}
-            <legend class="bi bi-images"> <u>{{ x.direccion }}</u>.</legend>
-            {%endfor%} 
-            <form action="{% url 'rentapp:insertar_foto' renta_id %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="input-group flex-nowrap">
-                    <div class="input-group flex-nowrap">
-                        <input hidden name="renta" value="{{ renta_id }}" type="text">
-                        {{ form.usertario.errors }}
+                    <div class="mb-3">
+                        <label for="customFileLang" class="form-label"><i class="bi bi-images"></i> Imagen</label>
+                        <input name="image_renta" type="file" class="form-control" id="customFileLang" lang="es">
+                        {{ form.image_renta.errors }}
                     </div>
-                </div>
-                <div class="form-control custom-file">
-                    {{ form.image_renta.errors }}
-                    <input name="image_renta" type="file" class="custom-file-input form-control" id="customFileLang" lang="es">
-                    <label class="custom-file-label" for="customFileLang"><i class="bi-images"></i> Imagen</label>
-                  </div>
-                
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">{{ form.name_foto_renta.label_tag }}
 
-                    </span>
-                    {{ form.name_foto_renta.errors }}
-                    {{ form.name_foto_renta }}
-                </div>
-                <div class="input-group flex-nowrap">
+                    <div class="mb-3">
+                        <label for="id_name_foto_renta" class="form-label">{{ form.name_foto_renta.label }}</label>
+                        {{ form.name_foto_renta }}
+                        {{ form.name_foto_renta.errors }}
+                    </div>
 
-                    <input class="btn btn-primary" type="submit" value="Subir Foto" />
-                    <a href="{% url 'rentapp:dashboard_rendatario' user.id %}">
-                        <input class="btn btn-secondary" type="" value="Dashboard" />
-                    </a>
-                </div>
-            </form>
-        </fieldset>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">Subir Foto</button>
+                        <a href="{% url 'rentapp:dashboard_rendatario' user.id %}" class="btn btn-secondary">Dashboard</a>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
     </div>
 </div>
-<p> 
-    {% for x in datos_fotos%}
-    <p>
-        <img style="width: 50px; height: 50px;" src="/media/{{x.image_renta}}" alt="imagen-{{x.id}}">
-    </p>
-    {% endfor %}
-</p>
-<!-- <p>{{renta_id}}</p> -->
+
+<div class="container mt-5">
+    <div class="row">
+        {% for x in datos_fotos %}
+        <div class="col-3">
+            <div class="card">
+                <img src="/media/{{ x.image_renta }}" class="card-img-top" alt="imagen-{{ x.id }}">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
 
-{% block pagination %}{% endblock %}
-
-</html>

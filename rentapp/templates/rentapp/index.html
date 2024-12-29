@@ -1,74 +1,63 @@
 {% extends "base_generic.html" %}
 {% block title %}<title>Index</title>{% endblock %}
 
-<style>
-  .btn {
-    margin: 9px;
-  }
-
-  .row {
-    margin: 4px;
-    padding: 4px;
-  }
-</style>
-
 {% block content %}
-<div class="row">
-  <div class="col-12 col-sm-12"> <h3>¿May be good?</h3>
-    <!-- Carrusel -->
-    <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+<div class="row col-12 align-items-stretch g-2">
+  <!-- Carrusel -->
+  <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+      <h3>¿May be good?</h3>
+
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="container">
-            <h3><u>Alsitio</u></h3>
-
-            <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png"
-              alt="Foto de Gino">
-            <p class="testimonio-texto"><u>Alsitio.com</u></p>
-            <div class="testimonio-info">
-              <p class="cargo">Restaurante.</p>
-            </div>
+          <div class="carousel-item active">
+              <div class="container">
+                  <h3><u>Fácil y Seguro</u></h3>
+                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png" alt="Foto de Gino">
+                  <p class="testimonio-texto"><u>Alsitio.com</u></p>
+                  <div class="testimonio-info">
+                      <p class="cargo">Restaurante.</p>
+                      <p>Usar nuestro sitio web para rentar es fácil y seguro. Encuentra la propiedad perfecta con solo unos clics.</p>
+                  </div>
+              </div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <h3><u>Trocitos Troop</u></h3>
-            <img class="testimonio-imagen rounded-circle" width="130em" height="90em" src="/media/gallery/trocitos.png"
-              alt="Foto de Nora">
-            <p class="testimonio-texto"><u>Trocitos Tropicales.com</u></p>
-            <div class="testimonio-info">
-              <p class="cargo">Restaurante.</p>
-            </div>
+          <div class="carousel-item">
+              <div class="container">
+                  <h3><u>Compra con Confianza</u></h3>
+                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/trocitos.png" alt="Foto de Nora">
+                  <p class="testimonio-texto"><u>Trocitos Tropicales.com</u></p>
+                  <div class="testimonio-info">
+                      <p class="cargo">Restaurante.</p>
+                      <p>Comprar una propiedad nunca ha sido tan sencillo. Nuestro sitio web te ofrece las mejores opciones de manera segura.</p>
+                  </div>
+              </div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <h3><u>Alsitio</u></h3>
-
-            <img class="testimonio-imagen rounded-circle" width="130em" height="90em" src="/media/gallery/alsitio.png"
-              alt="Foto de Leonardo">
-            <p class="testimonio-texto"><u>alsitio.com</u></p>
-            <div class="testimonio-info">
-              <p class="cargo">Restaurante.</p>
-            </div>
+          <div class="carousel-item">
+              <div class="container">
+                  <h3><u>Vende Rápido y Fácil</u></h3>
+                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png" alt="Foto de Leonardo">
+                  <p class="testimonio-texto"><u>alsitio.com</u></p>
+                  <div class="testimonio-info">
+                      <p class="cargo">Restaurante.</p>
+                      <p>Vender tu propiedad es rápido y fácil con nuestro sitio web. Llega a más compradores potenciales de manera segura.</p>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
       </button>
       <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
       </button>
-    </div>
   </div>
+</div>
 
-  <span id="location" hidden>"Localolo"</span>
+  <!-- <span id="location" hidden>"Localolo"</span> -->
 
   {{ fotos_rentas|json_script:"rentas-json" }}
-  <!--Tabajar con el mapa-->
+  
+  <!-- !!!Tabajar con el mapa!!!! -->
   <script>
     let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
     let myLatlng = [];
@@ -167,9 +156,8 @@
   </script>
 
   {% if rentas %}
-    <!--custom cards-->
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
+  <!--custom cards-->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     {% for renta in rentas %}
       <div class="col ">
         <div class="card shadow-sm">
@@ -185,14 +173,13 @@
               {% endif %}
           {% endfor %}
         </div>
-
           <div class="card-body">
-            <p class="card-text">{{ renta.direccion }}</p>
-            <p>Referencia: <u>{{ renta.referencia }}</u></p>
+            <p class="card-text"><i>{{ renta.direccion|title }}</i></p>
+            <p class="card-text"><i>Referencia</i>: <u>{{ renta.referencia }}</u></p>
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group">
                   <a
-                class="btn btn-lg btn-outline-primary" target="_parent" href="{% url 'rentapp:detail' renta.id %}"> 
+                class="btn btn-sm btn-outline-primary" target="_parent" href="{% url 'rentapp:detail' renta.id %}"> 
                 Ver
                   </a>
                   <!-- <a class="btn btn-sm btn-outline-secondary" href="insertar_amistad/{{renta.usertario_id}}-{{user.id}}-{{renta.id}}" target="_parent"
@@ -211,7 +198,23 @@
   {% else %}
   <p>no Rentas disponibles.</p>
   {% endif %}
-
+  
+ <!--pagination-->        
+ {% block pagination %}
+ <nav aria-label="Page navigation example">
+   <p>{{ rentas.number }} of {{rentas.paginator.num_pages }}</p>
+   <ul class="pagination">
+     {% if rentas.has_previous %}
+     <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primera</a></li>
+     <li class="page-item"><a class="page-link" href="?page={{rentas.previous_page_number }}">Previous</a></li>
+     {% endif %}
+     {% if rentas.has_next %}
+     <li class="page-item"><a class="page-link" href="?page={{ rentas.next_page_number }}">Next</a></li>
+     <li class="page-item"><a class="page-link" href="?page={{ rentas.paginator.num_pages }}">Última &raquo;</a></li>
+     {% endif %}
+   </ul>
+ </nav>
+ {% endblock %}
 </div>
 
 {% endblock %}

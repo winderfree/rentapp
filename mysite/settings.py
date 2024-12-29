@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_seed',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +144,9 @@ MEDIA_URL = '/media/'
 #GOOGLE_SSO_CLIENT_SECRET = "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"
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/rentapp'
+LOGIN_REDIRECT_URL = '/'
 # Esto registra en la consola cualquier envío de correo electrónico (y así puedes copiar el enlace de reinicio de contraseña desde dicha consola).
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# settings.py
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000  # Establece el límite que desees

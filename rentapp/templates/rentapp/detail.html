@@ -1,9 +1,6 @@
-{% extends "base_generic.html" %}
-
-{% block title %}<title>Details</title>{% endblock %}
-
-{% block customcards %}{% endblock %}
-
+{% extends "base_generic.html" %} 
+{% block title %}<title>Details</title>{%endblock %} 
+{% block customcards %}{% endblock %} 
 {% block content %}
 <style>
   #lienzoMapa {
@@ -47,13 +44,9 @@
   }
 </style>
 <div class="container">
-  <h1>Rentapp</h1>
-
   <div class="row">
-    <div class="col-12 col-sm-12">¿Buscas Renta?
+    <div class="col-12 col-sm-12">
       <h3 id="location">{{ renta_location.direccion }}.</h3>
-
-
     </div>
     <div hidden>
       <p id="latitud">{{ renta_location.latitud }}</p>
@@ -62,31 +55,39 @@
     {% if fotos %}
     <div class="fotos">
       {% for foto in fotos %}
-      <a target="_blank" href="{{ foto.image_renta.url }}"><img class="imagen_renta" src="{{ foto.image_renta.url }}"
-          alt="image_renta" /></a>
+      <a target="_blank" href="{{ foto.image_renta.url }}"
+        ><img
+          class="imagen_renta"
+          src="{{ foto.image_renta.url }}"
+          alt="image_renta"
+      /></a>
       {% endfor %}
     </div>
     {% endif %}
     <!-- Contacto -->
-    <div style="font-size: 42px;" >
-      <a href="{% url 'chat:room' renta_location.id %}" target="_parent" rel="noopener noreferrer"><i class="bi bi-envelope"
-          title="Contactar con Rentador."></i></a>
-      <a target="_parent" rel="noopener noreferrer"><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i>
+    <div style="font-size: 42px">
+      <a
+        href="{% url 'chat:room' renta_location.id %}"
+        target="_parent"
+        rel="noopener noreferrer"
+        ><i class="bi bi-envelope" title="Contactar con Rentador."></i
+      ></a>
+      <a target="_parent" rel="noopener noreferrer"
+        ><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i>
       </a>
     </div>
     <!-- <Mapa local -->
     {% if location %}
     <h1>location map:</h1>
     <div id="lienzoMapa"></div>
-    {% endif %}
-    {% if not location %}
+    {% endif %} {% if not location %}
     <p>Not a Map</p>
     {% endif %}
-
+    <h3>¿Donde? <code>{{ renta_location.referencia|title }}</code></h3>
 
     <script>
-      var latitud = document.getElementById("latitud")
-      var longitud = '-' + document.getElementById("longitud")
+      var latitud = document.getElementById("latitud");
+      var longitud = "-" + document.getElementById("longitud");
       var map;
       function initialize() {
         const svgMarker = {
@@ -104,10 +105,13 @@
         var myLatlng = new google.maps.LatLng(latitud, longitud);
         var mapOptions = {
           zoom: 18,
-          center: new google.maps.LatLng(latitud, longitud)
+          center: new google.maps.LatLng(latitud, longitud),
         };
 
-        var map = new google.maps.Map(document.getElementById('lienzoMapa'), mapOptions);
+        var map = new google.maps.Map(
+          document.getElementById("lienzoMapa"),
+          mapOptions
+        );
 
         var marker = new google.maps.Marker({
           position: myLatlng,
@@ -118,14 +122,12 @@
         // To add the marker to the map, call setMap();
         marker.setMap(map);
       }
-      google.maps.event.addDomListener(window, 'load', initialize);
+      google.maps.event.addDomListener(window, "load", initialize);
     </script>
     <script>
       var latitud = document.getElementById("latitud").innerHTML;
       var longitud = document.getElementById("longitud").innerHTML;
     </script>
-
-
   </div>
-  {% endblock %}
-  {% block pagination %}{% endblock %}
+  {% endblock %} {% block pagination %}{% endblock %}
+</div>
