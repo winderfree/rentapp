@@ -23,9 +23,9 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     # 'daphne',
-    'chat', 
     'rentapp.apps.RentappConfig',
     'gallery.apps.GalleryConfig',
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,7 +87,7 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
     'default': {
-        'NAME': 'rent_app',
+        'NAME': 'rentapp',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'Torres' ,
@@ -117,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-do'
+LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santo_Domingo'
 
 USE_I18N = True
 
@@ -150,3 +150,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # settings.py
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000  # Establece el límite que desees
+
+AUTH_USER_MODEL = 'rentapp.User'
+
+# Configuración de django-registration
+ACCOUNT_ACTIVATION_DAYS = 7  # Número de días para activar la cuenta
+REGISTRATION_AUTO_LOGIN = True  # Iniciar sesión automáticamente después del registro

@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Sign Up</title>{% endblock %}
+{{ messages }}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">Sign Up</h2>
+            <form method="post" action=".">
+                {% csrf_token %}
+              
+                {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                {{ form.username.errors }}
+                {{ form.email.errors }}
+                {{ form.password.errors }}
+                {{ form.tipo.errors }}
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="id_tipo" class="form-label">{{ form.tipo.label }}</label>
+                    {{ form.tipo }}
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">{{ form.password.label }}</label>
+                    {{ form.password }}
+                    <div class="form-text">
+                        Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                    </div>
+                    <div class="invalid-feedback">
+                        {{ form.password.errors }}
+                    </div>
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="id_password" class="form-label">{{ form.password.label }}</label>
+                    {{ form.password }}
+                   
+                </div> -->
+                <!-- {{form}} -->
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

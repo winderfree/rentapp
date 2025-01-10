@@ -2,55 +2,25 @@ import datetime
 from django import forms
 from .models import *
 
+
 class RentaForm(forms.ModelForm):
     class Meta:
         model = Renta
-        fields = ['usertario', 'direccion', 'sector', 'municipio', 'provincia', 'referencia']
+        fields = ['user', 'direccion', 'sector', 'municipio', 'provincia', 'referencia']
         # fields = "__all__"
-        widgets = {
+        # widgets = {
             
-            'usertario': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control '}),
-            'direccion': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;', 'class':'form-control ','placeholder': 'ex: 23, nombre Calle...'}),
-            'referencia': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'ex: Lugar de referencia...'}),
-            'provincia': forms.Select(attrs={'class':'form-control '}),
-            'municipio': forms.Select(attrs={'class':'form-control '}),
-            'sector': forms.Select(attrs={'class':'form-control '}),
+        #     'user': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control '}),
+        #     'direccion': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;', 'class':'form-control ','placeholder': 'ex: 23, nombre Calle...'}),
+        #     'referencia': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'ex: Lugar de referencia...'}),
+        #     'provincia': forms.Select(attrs={'class':'form-control '}),
+        #     'municipio': forms.Select(attrs={'class':'form-control '}),
+        #     'sector': forms.Select(attrs={'class':'form-control '}),
             
-            }
-        labels = {
-            'usertario': 'Rendataurio',
-        }
-class MensajeForm(forms.ModelForm):
-    class Meta:
-        model = Mensaje
-        fields = ['amistad', 'texto']
-        widgets = {
-            
-            'amistad': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control'}),
-            'texto': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control','placeholder': 'ex: Mensaje...'}),
-           
-            }
-
-class AmistadForm(forms.ModelForm):
-    class Meta:
-        model = Amistad
-        fields = ['id','usertario', 'userdador', 'relacion']
-        widgets = {
-            'relacion': forms.TextInput(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control ','placeholder': 'ex: Interes por Articulo.'}),
-            'usertario': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control '}),
-            'userdador': forms.Select(attrs={'style':'margin:10px 10px 10px 0px;','class':'form-control '}),
-        }
-
-class UsertarioForm(forms.ModelForm):
-    class Meta:
-        model = Usertario
-        fields = ('username', 'password', 'email','categoria')
-        
-class UserdadorForm(forms.ModelForm):
-    class Meta:
-        model = Userdador
-        fields = ('username', 'password', 'email')
-        
+        #     }
+        # labels = {
+        #     'user': 'Usuario',
+        # }
 class FotoForm(forms.ModelForm):
     class Meta:
         model = Foto
@@ -66,4 +36,14 @@ class FotoForm(forms.ModelForm):
             'image_renta': 'Select'
         }
 
-    
+class RentaForm(forms.ModelForm):
+    class Meta:
+        model = Renta
+        fields = '__all__'
+        
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        # fields = '__all__'
+        fields = ['username', 'email', 'password', 'tipo']

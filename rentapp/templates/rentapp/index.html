@@ -2,63 +2,16 @@
 {% block title %}<title>Index</title>{% endblock %}
 
 {% block content %}
-<div class="row col-12 align-items-stretch g-2">
   <!-- Carrusel -->
-  <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
-      <h3>¿May be good?</h3>
-
-      <div class="carousel-inner">
-          <div class="carousel-item active">
-              <div class="container">
-                  <h3><u>Fácil y Seguro</u></h3>
-                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png" alt="Foto de Gino">
-                  <p class="testimonio-texto"><u>Alsitio.com</u></p>
-                  <div class="testimonio-info">
-                      <p class="cargo">Restaurante.</p>
-                      <p>Usar nuestro sitio web para rentar es fácil y seguro. Encuentra la propiedad perfecta con solo unos clics.</p>
-                  </div>
-              </div>
-          </div>
-          <div class="carousel-item">
-              <div class="container">
-                  <h3><u>Compra con Confianza</u></h3>
-                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/trocitos.png" alt="Foto de Nora">
-                  <p class="testimonio-texto"><u>Trocitos Tropicales.com</u></p>
-                  <div class="testimonio-info">
-                      <p class="cargo">Restaurante.</p>
-                      <p>Comprar una propiedad nunca ha sido tan sencillo. Nuestro sitio web te ofrece las mejores opciones de manera segura.</p>
-                  </div>
-              </div>
-          </div>
-          <div class="carousel-item">
-              <div class="container">
-                  <h3><u>Vende Rápido y Fácil</u></h3>
-                  <img class="testimonio-imagen rounded-circle" width="130px" height="90px" src="/media/gallery/alsitio.png" alt="Foto de Leonardo">
-                  <p class="testimonio-texto"><u>alsitio.com</u></p>
-                  <div class="testimonio-info">
-                      <p class="cargo">Restaurante.</p>
-                      <p>Vender tu propiedad es rápido y fácil con nuestro sitio web. Llega a más compradores potenciales de manera segura.</p>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
-      </button>
-  </div>
-</div>
+  <!-- row col-12 align-items-stretch g-2 -->
+  
 
   <!-- <span id="location" hidden>"Localolo"</span> -->
 
-  {{ fotos_rentas|json_script:"rentas-json" }}
+  <!-- {{ fotos_rentas|json_script:"rentas-json" }} -->
   
   <!-- !!!Tabajar con el mapa!!!! -->
-  <script>
+  <!-- <script>
     let jsondataRenta = JSON.parse(document.getElementById('renta-json').textContent)
     let myLatlng = [];
     let result_lat = 0;
@@ -153,7 +106,7 @@
       }
     }
     google.maps.event.addDomListener(window, 'load', initialize);
-  </script>
+  </script> -->
 
   {% if rentas %}
   <!--custom cards-->

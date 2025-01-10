@@ -6,11 +6,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h3>Contenido Dashboard de {{ quien_es }}</h3>
-    <a class="btn btn-primary mb-3" href="{% url 'rentapp:insertar_renta' %}" target="_self" rel="noopener noreferrer">Nueva Renta</a>
-
-    <p>Crear CRUD</p>
-
+    <h3>Contenido Dashboard de {{ quien_es }}, {{user.id}}, {{  rentas.id }}</h3>
     <div>
         {% if mensajes %}
         <ul class="list-group">
@@ -20,25 +16,31 @@
         </ul>
         {% endif %}
     </div>
-
-    <div class="row">
+    <div class="row">    
+        <a class="btn btn-primary mb-3" href="{% url 'rentapp:insertar_renta' %}" target="_self" rel="noopener noreferrer">Nueva Renta</a>
+    
+        <p>{{ rentas.usertario.id }}</p>
         {% for renta in rentas %}
+        <!-- {% if renta.user.id == user.id %} -->
         <div class="col-md-6 mb-4">
             <div class="card border-dark">
                 <div class="card-body">
                     <h5 class="card-title">{{ renta.direccion|title }}</h5>
                     <p class="card-text">
-                        <strong>Referencia:</strong> {{ renta.referencia|title }}<br>
-                        <strong>Tipo:</strong> {{ renta.referencia.tipo|title }}
+                        <!-- <strong>Referencia:</strong> {{ renta.referencia|title }}<br>
+                        <strong>Tipo:</strong> {{ renta.user.tipo|title }} -->
                     </p>
                     <div class="d-flex justify-content-between">
                         <a class="btn btn-outline-primary" target="_parent" href="{% url 'rentapp:detail' renta.id %}">Ver</a>
-                        <a class="btn btn-secondary" target="_parent" href="{% url 'rentapp:insertar_foto' renta.id %}">+ Imagen</a>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{ renta.id }}">X</button>
+                        <a class="btn btn-secondary" target="_parent" href="{% url 'rentapp:insertar_foto' renta.id %}"><i class="bi bi-plus-square-fill"></i> Imagen</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{ renta.id }}"><i class="bi bi-trash"></i></button>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- {% else %}
+        <p>No hay rentas disponibles</p>
+        {% endif %} -->
 
         <!-- Modal borrar -->
         <div class="modal fade" id="modal{{ renta.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -53,7 +55,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <a href="{% url 'rentapp:delete_renta' renta.id renta.usertario.id %}" class="btn btn-danger">Borrar</a>
+                        <a href="{% url 'rentapp:delete_renta' renta.id renta.user.id %}" class="btn btn-danger">Borrar</a>
                     </div>
                 </div>
             </div>

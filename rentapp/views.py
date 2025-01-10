@@ -3,158 +3,137 @@ import time
 # import asyncio
 from django.core.paginator import Paginator
 # from geopy.geocoders import Nominatim
-from django.shortcuts import redirect, render
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+# from django.shortcuts import redirect, render
+from django.shortcuts import  render
+# from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import  HttpResponse, HttpResponseRedirect
 from .forms import *
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+# from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 
-# def login_user(request):
-#     if request.method == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             # redirect to a success page.
-#             return HttpResponseRedirect("/")
+# filepath: /c:/Users/WinFree/Desktop/repo/rentapp/rentapp/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Renta
+from .forms import RentaForm
 
-#         else:
-#             #returns an 'invalid login' error message
-#             messages.success(request, ("There Was An Error Login IIN, Try Again"))
-#             return redirect('login_user')
+# def editar_renta(request, renta_id):
+#     renta = get_object_or_404(Renta, id=renta_id)
+#     if request.method == 'POST':
+#         form = RentaForm(request.POST, instance=renta)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('rentapp:detail', renta_id=renta.id)
 #     else:
-#         return render(request, "/", {})
+#         form = RentaForm(instance=renta)
+#     return render(request, 'rentapp/editar_renta.html', {'form': form})
 
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def insertar_mensaje(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = MensajeForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            new_mensaje = Mensaje(
-                amistad = form.cleaned_data['amistad'],
-                texto = form.cleaned_data['texto'],
-                tipo = 'rendador',
-                pub_date = time.strftime('%Y-%m-%d %I:%M')
-                 )
-            new_mensaje.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect('/rentapp/insertar_mensaje/')
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        # print (datos)
-        form = MensajeForm()
-    return render(request, 'rentapp/insertar_mensaje.html', {'form': form, })
+# def insertar_mensaje(request):
+#     # if this is a POST request we need to process the form data
+#     if request.method == 'POST':
+#         # create a form instance and populate it with data from the request:
+#         form = MensajeForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required
+#             new_mensaje = Mensaje(
+#                 amistad = form.cleaned_data['amistad'],
+#                 texto = form.cleaned_data['texto'],
+#                 tipo = 'rendador',
+#                 pub_date = time.strftime('%Y-%m-%d %I:%M')
+#                  )
+#             new_mensaje.save()
+#             # redirect to a new URL:
+#             return HttpResponseRedirect('/rentapp/insertar_mensaje/')
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         # print (datos)
+#         form = MensajeForm()
+#     return render(request, 'rentapp/insertar_mensaje.html', {'form': form, })
 
-def insertar_mensaje_rendatario(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = MensajeForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            new_mensaje = Mensaje(
-                amistad = form.cleaned_data['amistad'],
-                texto = form.cleaned_data['texto'],
-                tipo = 'rendatario',
-                pub_date = time.strftime('%Y-%m-%d %I:%M')
-                 )
-            new_mensaje.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect('/rentapp/insertar_mensaje_rendatario/')
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        datos_amistad = list(Amistad.objects.values().order_by("-id"))
-        datos = list(Mensaje.objects.values().order_by("-id"))
-        # print (datos)
-        form = MensajeForm()
-    return render(request, 'rentapp/insertar_mensaje_rendatario.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
+# def insertar_mensaje_rendatario(request):
+#     # if this is a POST request we need to process the form data
+#     if request.method == 'POST':
+#         # create a form instance and populate it with data from the request:
+#         form = MensajeForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required
+#             new_mensaje = Mensaje(
+#                 amistad = form.cleaned_data['amistad'],
+#                 texto = form.cleaned_data['texto'],
+#                 tipo = 'rendatario',
+#                 pub_date = time.strftime('%Y-%m-%d %I:%M')
+#                  )
+#             new_mensaje.save()
+#             # redirect to a new URL:
+#             return HttpResponseRedirect('/rentapp/insertar_mensaje_rendatario/')
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         datos_amistad = list(Amistad.objects.values().order_by("-id"))
+#         datos = list(Mensaje.objects.values().order_by("-id"))
+#         # print (datos)
+#         form = MensajeForm()
+#     return render(request, 'rentapp/insertar_mensaje_rendatario.html', {'form': form, 'datos': datos, 'datos_amistad': datos_amistad })
 
-def insertar_amistad(request, usertario_id, userdador_id, renta_id):
-    existe_amistad = Amistad.objects.filter(usertario=usertario_id,userdador=userdador_id, renta=renta_id).values_list()
-    # if(existe_amistad):
-    #     return HttpResponse("Si existe")
-    # else:
-    #     return HttpResponse("No existe")
-    # return HttpResponse(existe_amistad[0][0])
-    if existe_amistad:
-          return HttpResponseRedirect(f"/chat/{existe_amistad[0][0]}")
-    else:
-          renta = Renta.objects.get(id=renta_id)
-          usertario = Usertario.objects.get(id=usertario_id)
-          userdador = Userdador.objects.get(id=userdador_id)
+# def insertar_amistad(request, usertario_id, userdador_id, renta_id):
+#     existe_amistad = Amistad.objects.filter(usertario=usertario_id,userdador=userdador_id, renta=renta_id).values_list()
+#     # if(existe_amistad):
+#     #     return HttpResponse("Si existe")
+#     # else:
+#     #     return HttpResponse("No existe")
+#     # return HttpResponse(existe_amistad[0][0])
+#     if existe_amistad:
+#           return HttpResponseRedirect(f"/chat/{existe_amistad[0][0]}")
+#     else:
+#           renta = Renta.objects.get(id=renta_id)
+#           usertario = Usertario.objects.get(id=usertario_id)
+#           userdador = Userdador.objects.get(id=userdador_id)
 
-          f = AmistadForm()
-          new_amistad = f.save(commit=False)
-          new_amistad.renta = renta
-          new_amistad.usertario = usertario #12
-          new_amistad.userdador = userdador #12,
-          new_amistad.relacion = f'{usertario}:{ renta}'
-          new_amistad.pub_date = time.strftime('%Y-%m-%d %I:%M')
-          new_amistad.save()
-          # get the last 'id'
-          obj = Amistad.objects.latest('id')
-          # redirect to a new URL:
-          return HttpResponseRedirect(f"/chat/{obj}")
+#           f = AmistadForm()
+#           new_amistad = f.save(commit=False)
+#           new_amistad.renta = renta
+#           new_amistad.usertario = usertario #12
+#           new_amistad.userdador = userdador #12,
+#           new_amistad.relacion = f'{usertario}:{ renta}'
+#           new_amistad.pub_date = time.strftime('%Y-%m-%d %I:%M')
+#           new_amistad.save()
+#           # get the last 'id'
+#           obj = Amistad.objects.latest('id')
+#           # redirect to a new URL:
+#           return HttpResponseRedirect(f"/chat/{obj}")
    
-def insertar_userdador(request):
+def insertar_user(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = UserdadorForm(request.POST)
+        form = UserForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            user = Userdador(
+            user = User(
                 username = form.cleaned_data['username'],
                 password = form.cleaned_data['password'],
                 email = form.cleaned_data['email'],
-                tipo = 'userdador' )
+                tipo = form.cleaned_data['tipo'], )
             user.set_password(form.cleaned_data['password'])
             user.save()
 
-            return HttpResponseRedirect('/rentapp/')
+            return HttpResponseRedirect(f'/dashboard/{user.id}')
     # if a GET (or any other method) we'll create a blank form
     else:
 
         #datos = list(Usertario.objects.values().order_by("-id"))
-        form = UserdadorForm()
+        form = UserForm()
     mensajes = messages.success(request, "Por favor inicie session o cuenta nueva")
 
-    return render(request, 'rentapp/insertar_userdador.html', {'mensajes':mensajes,'form': form})
+    return render(request, 'rentapp/insertar_user.html', {'mensajes':mensajes,'form': form})
 
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from .models import Usertario
-from .forms import UsertarioForm
-
-def insertar_usertario(request):
-    # Obtener todos los usertarios para mostrarlos en la página
-    ver_usertarios = Usertario.objects.all()
-
-    # Si se recibe una solicitud POST, procesar los datos del formulario
-    if request.method == 'POST':
-        form = UsertarioForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)  # Crear el objeto Usertario sin guardar aún
-            user.tipo = 'usertario'  # Asignar el valor al campo 'tipo'
-            user.set_password(form.cleaned_data['password'])  # Encriptar la contraseña
-            user.save()  # Guardar el objeto Usertario en la base de datos
-            return redirect('insertar_renta')  # Redirigir a la URL especificada después de guardar
-    else:
-        form = UsertarioForm()  # Crear un formulario en blanco para una solicitud GET
-
-    # Renderizar la plantilla con el formulario y la lista de usertarios
-    return render(request, 'rentapp/insertar_usertario.html', {'form': form, 'ver_usertarios': ver_usertarios})
 
 def insertar_foto(request, renta_id):
     datos_fotos = list(Foto.objects.filter(renta=renta_id).order_by("-id"))
@@ -197,20 +176,19 @@ def insertar_renta(request):
             direccion_full = f"{form.cleaned_data['direccion']}, {form.cleaned_data['sector']}, {municipio_nombre[1]}, {provincia_nombre[1]}, República Dominicana"
             # geolocator = Nominatim(user_agent="rentapp", timeout=10)
             # location = geolocator.geocode(direccion_full)
-            location = ""
+            # location = ""
 
             # process the data in form.cleaned_data as required
             # ...
             new_renta = Renta(
-                usertario = form.cleaned_data['usertario'],
+                user = form.cleaned_data['user'],
                 direccion = direccion_full,
                 sector = form.cleaned_data['sector'],
                 municipio = municipio_nombre[1],
                 provincia = provincia_nombre[1],
                 referencia = form.cleaned_data['referencia'],
-                pub_date = time.strftime('%Y-%m-%d %I:%M'),
-                latitud = location.latitude if location else 'not' ,
-                longitud = location.longitude if location else 'not' )
+                # pub_date = time.strftime('%Y-%m-%d %I:%M'),
+                )
             new_renta.save()
             obj = Renta.objects.latest('id')
             renta_id = obj
@@ -280,10 +258,11 @@ def buscar(request):
 def quien_es():
     pass
 
-def dashboard_rendatario(request, id_rendatario):
-    quien_es = Usertario.objects.all().filter(id=id_rendatario).values("tipo")[0]['tipo']
+@login_required
+def dashboard(request, id_user):
+    quien_es = User.objects.all().filter(id=id_user).values("tipo")[0]['tipo']
     # tener todas las rentas del usuario
-    rentas = Renta.objects.all().filter(usertario=id_rendatario).order_by('-id')
+    rentas = Renta.objects.all().filter(user=id_user).order_by('-id')
     # user_app = User.objects.all().filter(usertario=id_rendatario).order_by('-id')
     print(quien_es)
     print(rentas)
@@ -293,23 +272,10 @@ def dashboard_rendatario(request, id_rendatario):
     }
     return render(request, "rentapp/dashboard.html", context)
 
-def dashboard_rendador(request, id_rendador):
-    quien_es = Userdador.objects.all().filter(id=id_rendador).values("tipo")[0]['tipo']
-    # tener todas las rentas del usuario
-    rentas = Renta.objects.all().filter(userdador=id_rendador).order_by('-id')
-    # user_app = User.objects.all().filter(usertario=id_rendatario).order_by('-id')
-    print(quien_es)
-    print(rentas)
-    context = {
-        "quien_es": quien_es,
-        "rentas": rentas,
-    }
-    return render(request, "rentapp/dashboard.html", context)
-
-def delete_renta(request, id_renta, usertario):
+def delete_renta(request, id_renta, user):
     renta = Renta.objects.filter(id=id_renta)
     renta.delete()
-    return HttpResponseRedirect(f"../dashboard_rendatario/{usertario}")
+    return HttpResponseRedirect(f"../dashboard/{user}")
 
 
 def prueba(request):

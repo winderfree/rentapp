@@ -21,13 +21,15 @@
                 <form action="{% url 'rentapp:insertar_renta' %}" method="post">
                     {% csrf_token %}
                     <!--usertario form-->
-                    <input hidden name="usertario" value="{{user.id}}" type="text">
+                    <input hidden name="user" value="{{user.id}}" type="text">
                     {{ form.usertario.errors }}
 
                     <!--dirección form-->
+                    <label for="id_direccion">{{ form.direccion.label }}</label>
+
                     <div class="form-floating mb-3">
+
                         {{ form.direccion }}
-                        <label for="id_direccion">{{ form.direccion.label }}</label>
                         {{ form.direccion.errors }}
                     </div>
 
@@ -44,9 +46,10 @@
                 </div>
 
                     <!--referencia form-->
+                    <label for="id_referencia">{{ form.referencia.label }}</label>
+
                     <div class="form-floating mb-3">
                         {{ form.referencia }}
-                        <label for="id_referencia">{{ form.referencia.label }}</label>
                         {{ form.referencia.errors }}
                     </div>
 

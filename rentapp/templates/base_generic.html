@@ -9,10 +9,8 @@
   <!-- Bootstrap -->
   <link href="/media/bootstrap-5.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="/media/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
-  <!-- My estilo css -->
-  <link href="/media/css/style.css" rel="stylesheet">
-
-  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+  
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +23,8 @@
       justify-content: center;
     }
   </style>
+
+
   <!-- Add additional CSS in static file -->
   <!-- {% load static %} -->
   <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}">-->
@@ -32,24 +32,27 @@
 
 <body>
   <div class="container-fluid">
-    <div class="row col-12 align-items-stretch g-2">
+    <div class="row col-12 align-items-stretch  g-2">
       <!--Header-->
       {% block header %}
       <header class="col-12">
         <h1 class="display-1">RentAventa</h1>
         <p class="lead">Renta, compra y venta.</p>
         <!--navbar-->
-        <nav class="navbar bg-body-tertiary fixed bg-transparent">
+        <nav class="navbar bg-transparent">
           <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'rentapp:index' %}">
-              <img class="rounded-circle" src="/media/gallery/rentapp_logo.png" alt="logo" width="50">
-            </a>
             {% if not user.is_authenticated %}
-            <a href="{% url 'login' %}" class="btn btn-primary ms-3" type="button">Inicia sesión</a>
+            
+            <a href="{% url 'login' %}" class="btn btn-primary position-left" type="button">Inicia sesión</a>
             {% endif %}
+            <a class="navbar-brand" href="{% url 'rentapp:index' %}">
+              <!-- <img class="rounded-circle" src="/media/gallery/rentapp_logo.png" alt="logo" width="50"> -->
+            </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
               aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+              <!-- <span class="navbar-toggler-icon"></span> -->
+              <img class="rounded-circle" src="/media/gallery/rentapp_logo.png" alt="logo" width="50">
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
               aria-labelledby="offcanvasNavbarLabel">
@@ -77,7 +80,7 @@
                     <ul class="dropdown-menu">
                       <li>
                         <a class="dropdown-item d-flex align-items-center"
-                          href="{% url 'rentapp:dashboard_rendatario' user.id %}">
+                          href="{% url 'rentapp:dashboard' user.id %}">
                           <i class="bi bi-dashboard me-2"></i>
                           Dashboard
                         </a>
@@ -110,19 +113,13 @@
                   <dl>
                     <dt><code>Desactivo</code></dt>
                     <dd>
-                      <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"
+                      <a href="{% url 'registration_register' %}"
                         class="d-flex align-items-center">
                         <i class="bi bi-door-open-fill me-2"></i>
-                        Sign'Rendador'
+                        Sign'Usuario'
                       </a>
                     </dd>
-                    <dd>
-                      <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"
-                        class="d-flex align-items-center">
-                        <i class="bi bi-door-open-fill me-2"></i>
-                        Sign'Rendatario'
-                      </a>
-                    </dd>
+    
                     <dd>
                       <a href="{% url 'login'%}?next={{request.path}}" class="d-flex align-items-center">
                         <i class="bi bi-door-open-fill me-2"></i>
@@ -141,12 +138,51 @@
             </div>
           </div>
         </nav>
+        
         {% endblock %}
         <!--Saludos-->
         {% block saludos %}
         <div class="row col-12 align-items-stretch g-2 ">
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>Te saluda [RENTAPP]!</strong> You should check in on some of those fields below.
+            <!-- <strong>Te saluda [RENTAPP]!</strong> You should check in on some of those fields below. -->
+            <div class="row row-cols-12 row-cols-sm-12 ">
+              <div id="testimonios-carrusel" class="carousel carousel-dark slide " data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                      <div class="carousel-item active">
+                          <div class="container">
+                              <h3><u>Fácil y Seguro</u></h3>
+                              <div class="testimonio-info">
+                                  <p>Usar nuestro sitio web para rentar es fácil y seguro. Encuentra la propiedad perfecta con solo unos clics.</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <div class="container">
+                              <h3><u>Compra con Confianza</u></h3>
+                              <div class="testimonio-info">
+                                  <p>Comprar una propiedad nunca ha sido tan sencillo. Nuestro sitio web te ofrece las mejores opciones de manera segura.</p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <div class="container">
+                              <h3><u>Vende Rápido y Fácil</u></h3>
+                              <div class="testimonio-info">
+                                  <p>Vender tu propiedad es rápido y fácil con nuestro sitio web. Llega a más compradores potenciales de manera segura.</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Anterior</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Siguiente</span>
+                  </button>
+              </div>
+          </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <!-- <div class="alert alert-warning alert-dismissible fade show row col-12 align-items-stretch g-2" role="alert">
@@ -155,8 +191,6 @@
           </div> -->
         </div>
         {% endblock %}
-
-
         <!--block content-->
         <div class="col-sm-12">
           {% block content %}
@@ -166,88 +200,6 @@
 
           {% block footer %}
           <footer>WinderFree-Apps</footer>
-          <!--navbar-->
-          <nav class="navbar bg-body-tertiary fixed bg-transparent">
-            <div class="container-fluid  row col-12 align-items-stretch g-2">
-
-              <a class="navbar-brand" href="{% url 'rentapp:index' %}"><img class="rounded-circle"
-                  src="/media/gallery/rentapp_logo.png" alt="logo" width="50"></a>
-              {% if not user.is_authenticated %}
-              <a href="{% url 'login' %}" class="btn btn-primary" type="button">Inicia sesión</a>
-              {% endif %}
-              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                  <a href="{% url 'rentapp:index' %}" class="offcanvas-title" id="offcanvasNavbarLabel">Rentapp</a>
-                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                      <a style="font-size: 24px;color: #198754;" class="" href="/rentapp/"><i
-                          style="font-size: 43px;color: #198754;" class="bi bi-house"></i></a>
-                      <a class="nav-link active" aria-current="page" href="{% url 'rentapp:index' %}">Home</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle bi bi-menu-app-fill" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Menú
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a class="dropdown-item" href="{% url 'rentapp:dashboard_rendatario' user.id %}">
-                            <i class="bi-dashboard"></i>
-                            Dashboard
-                          </a>
-                        </li>
-                        <li><a class="dropdown-item" href="/rentapp/insertar_renta/"><i class="bi-plus-square-fill"></i>
-                            Nueva Renta</a></li>
-                        <li><a class="dropdown-item" href="#">
-                            <i class="bi-envelope"></i> Mensajes</a></li>
-                        <li>
-                          <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="{% url 'rentapp:logout_user'%}?next={{request.path}}"><i
-                              class="bi bi-door-closed-fill"></i>
-                            Cerrar sesión</a>
-                        </li>
-                      </ul>
-                    </li>
-                    {% else %}
-                    <dl>
-                      <dt><code>Desactivo</code></dt>
-                      <dd>
-                        <a href="{% url 'rentapp:insertar_userdador'%}?next={{request.path}}"><i
-                            class="bi bi-door-open-fill"></i>
-                          Sign'Rendador'</a>
-                      </dd>
-                      <dd>
-                        <a href="{% url 'rentapp:insertar_usertario'%}?next={{request.path}}"><i
-                            class="bi bi-door-open-fill"></i>
-                          Sign'Rendatario'</a>
-                      </dd>
-                      <dd>
-                        <a href="{% url 'login'%}?next={{request.path}}"><i class="bi bi-door-open-fill"></i>
-                          Iniciar sesión</a>
-                      </dd>
-                      <dd><code>Aquí inicia sesión...</code></dd>
-                    </dl>
-                    {% endif %}
-                  </ul>
-                  <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </nav>
           {% endblock %}
         </div>
     </div>

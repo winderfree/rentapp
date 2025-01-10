@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+{% block title %}<title>Rentapp - Add Userdador</title>{% endblock %}
+{% block saludos %}
+{% block customcards %}{% endblock %}
+
+<div class="alert alert-warning alert-dismissible fade show " role="alert">
+  <span>Si aún no tienes una cuenta, puedes crear una 
+     <a href="{% url 'registration_register' %}">click aqui</a> </span>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endblock %}
+
+
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+  Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.
+</div>
+<input type="hidden" name="next" value="{{ next }}">
+{% endif %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<div class="alert alert-warning" role="alert">
+  Su cuenta no tiene acceso a esta página. Para continuar, inicie sesión con una cuenta que tenga acceso.
+</div>
+{% else %}
+{{pass}}
+{% endif %}
+{% endif %}
+
+<h3 class="mb-3">Login</h3>
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <div class="form-floating mb-3">
+    <input autofocus name="username" id="inputUsername" class="form-control" type="text" placeholder="Username"
+      aria-label="default input example">
+    <label for="inputUsername">{{ form.username.label }}</label>
+  </div>
+  <div class="form-floating mb-3">
+    <input name="password" id="inputPassword" class="form-control" type="password" placeholder="Password"
+      aria-label="default input example">
+    <label for="inputPassword">{{ form.password.label }}</label>
+  </div>
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="btn btn-primary w-100" type="submit">Iniciar sesión</button>
+  <p><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></p>
+  {# Asume que configura la vista de restablecimiento de contraseña en su URLconf #}
+</form>
+
+{% endblock %}
+

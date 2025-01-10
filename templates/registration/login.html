@@ -4,9 +4,8 @@
 {% block customcards %}{% endblock %}
 
 <div class="alert alert-warning alert-dismissible fade show " role="alert">
-  Inicia sesión o Crea una cuenta
-  <span>Si buscas <strong>rentar</strong> <a href="{% url 'login' %}">click <u>aqui</u></a> </span>
-  <span><strong>Propietario o Empresa</strong> click <u>aqui</u></span>
+  <span>Si aún no tienes una cuenta, puedes crear una 
+     <a href="{% url 'registration_register' %}">click aqui</a> </span>
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endblock %}

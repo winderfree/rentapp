@@ -1,49 +1,36 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-class Usertario(User, models.Model): 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    tipo = models.CharField(max_length=24, null=True )
+from mysite import settings
+
+class User(AbstractUser): 
+    
     categoria = models.CharField(
         max_length=24,
     # default = "propietario",
     )  
-    class Meta:
-        db_table = "Usertario"
-    
-    def __str__(self):
-        return f'{self.username}-{self.categoria}'
-class Userdador(User, models.Model):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    class Meta:
-        db_table = "Userdador"
 
-    tipo = models.CharField(max_length=24, null=True )    
     def __str__(self):
         return f'{self.username}'
-
+    
+  
+    def get_categoria(self):
+        return self.categoria
+ 
 class Renta(models.Model):
-    usertario = models.ForeignKey(Usertario, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     direccion = models.CharField(max_length=200)
     provincia = models.CharField(max_length=200, blank=True)
     municipio = models.CharField(max_length=200, blank=True)
     sector = models.CharField(max_length=200, blank=True)
+    referencia = models.CharField(max_length=200, blank=True)
 
-    referencia = models.CharField(max_length=200)
-    pub_date = models.DateTimeField("fecha publicado")
-    latitud = models.CharField(max_length=42, blank=True)
-    longitud = models.CharField(max_length=42, blank=True)
-
-    # q = Question(question_text="What's new?", pub_date=timezone.now())
     def __str__(self):
-        return f'{int(self.id)}'
+        return self.direccion
 
 class Amistad(models.Model):
     renta = models.ForeignKey(Renta, on_delete=models.CASCADE, null=True)
-    usertario = models.ForeignKey(Usertario, on_delete=models.CASCADE)
-    userdador = models.ForeignKey(Userdador, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     relacion = models.CharField(max_length=200, null=True)
     pub_date = models.DateTimeField("fecha publicado", null=True)
 
