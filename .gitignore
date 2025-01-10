@@ -19,11 +19,14 @@ __pycache__/
 *.env
 
 # Environments
+.envforrequierements
 .env
 .venv
+envforrequierements/
 env/
 venv/
 ENV/
+envforrequierements.back/
 env.bak/
 venv.bak/
 
