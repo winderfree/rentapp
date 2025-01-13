@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h3>Contenido Dashboard de {{ quien_es }}, {{user.id}}, {{  rentas.id }}</h3>
+    <h3>Contenido Dashboard de {{ quien_es }}, {{user|title}}</h3>
     <div>
         {% if mensajes %}
         <ul class="list-group">
@@ -16,16 +16,19 @@
         </ul>
         {% endif %}
     </div>
-    <div class="row">    
-        <a class="btn btn-primary mb-3" href="{% url 'rentapp:insertar_renta' %}" target="_self" rel="noopener noreferrer">Nueva Renta</a>
-    
+    <div class="row">   
+        <div>
+            <a class="btn btn-primary mb-3 bi bi-plus-square-fill" href="{% url 'rentapp:insertar_renta' %}" target="_self" rel="noopener noreferrer">
+                Nueva Renta</a>
+        </div> 
+        
         <p>{{ rentas.usertario.id }}</p>
         {% for renta in rentas %}
         <!-- {% if renta.user.id == user.id %} -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-4 mb-4">
             <div class="card border-dark">
                 <div class="card-body">
-                    <h5 class="card-title">{{ renta.direccion|title }}</h5>
+                    <b class="card-title">{{ renta.direccion|title }}</b>
                     <p class="card-text">
                         <!-- <strong>Referencia:</strong> {{ renta.referencia|title }}<br>
                         <strong>Tipo:</strong> {{ renta.user.tipo|title }} -->

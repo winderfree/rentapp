@@ -43,10 +43,15 @@
     display: inline-block;
   }
 </style>
+
 <div class="container">
   <div class="row">
     <div class="col-12 col-sm-12">
-      <h3 id="location">{{ renta_location.direccion }}.</h3>
+      <legend><b>Se Renta</b></legend>
+      <p class="card-text">Por: <i>{{ renta_location.user|title }}</i> </p>
+      
+      <b id="location" class="card-text">{{ renta_location.direccion|title }}.</b>
+
     </div>
     <div hidden>
       <p id="latitud">{{ renta_location.latitud }}</p>
@@ -66,23 +71,48 @@
     {% endif %}
     <!-- Contacto -->
     <div style="font-size: 42px">
-      <a
+      <!-- <a
         href="#"
-        target="_parent"
+        target="_blank"
         rel="noopener noreferrer"
         ><i class="bi bi-envelope" title="Contactar con Rentador."></i
-      ></a>
-      <a target="_parent" rel="noopener noreferrer"
-        ><i class="bi bi-whatsapp" title="Contactar con Whatapp."></i>
-      </a>
+      ></a> -->
+      <a
+        href="mailto:{{renta_location.user.email}}"
+        target="_blank"
+        rel="noopener noreferrer">
+        <i 
+          class="bi bi-envelope-check-fill"
+          title="Enviar e-mail al rendatario."></i></a>
+
+      <a 
+        target="_parent" 
+        rel="noopener noreferrer">
+        <i 
+          class="bi bi-whatsapp" 
+          title="Contactar con Whatapp.">
+        </i></a>
+    </div>
+    <div>
+
+      <p class="card-text">Teléfono: <b>{{ renta_location.user.phone_number }}</b></p>
+
     </div>
     <!-- <Mapa local -->
-    {% if location %}
+    <!-- {% if location %}
     <h1>location map:</h1>
     <div id="lienzoMapa"></div>
     {% endif %} {% if not location %}
     <p>Not a Map</p>
-    {% endif %}
+    {% endif %} -->
+    <!-- <a
+      href="mailto:juans.casado@gmail.com"
+      target="_blank"
+      rel="noopener noreferrer">
+      <i 
+        class="bi bi-envelope-check-fill">
+      </i>
+    </a> -->
     <h3>¿Donde? <code>{{ renta_location.referencia|title }}</code></h3>
 
     <script>

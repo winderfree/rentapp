@@ -114,33 +114,38 @@
     {% for renta in rentas %}
       <div class="col ">
         <div class="card shadow-sm">
-          <!--carusel de fotos-->
-          <div style="display: -webkit-inline-flex; height: auto;">
-
-          {% for foto in fotos_rentas %}
-              {% if renta.id == foto.renta_id %}
-                <a target="_parent" href="/media/{{ foto.image_renta }}">
-                  <img style="margin: 4px; height: 60px;width: 50px;" class="fotos"
-                    src="/media/{{ foto.image_renta }}" alt="media/{{ foto.image_renta }}" />
-                </a>
-              {% endif %}
-          {% endfor %}
-        </div>
           <div class="card-body">
+            <legend><b>Se Renta</b></legend>
+            <p class="card-text">Por:<i> {{ renta.user|title }}</i></p>
             <p class="card-text"><i>{{ renta.direccion|title }}</i></p>
-            <p class="card-text"><i>Referencia</i>: <u>{{ renta.referencia }}</u></p>
-            <div class="d-flex justify-content-between align-items-center">
+            <!--fotos-->
+            <div style="display: -webkit-inline-flex; ">
+              {% for foto in fotos_rentas %}
+                  {% if renta.id == foto.renta_id %}
+                    <a target="_parent" href="{% url 'rentapp:detail' renta.id %}">
+                      <img style="margin: 4px; height: 60px;width: 50px;" class="fotos"
+                        src="/media/{{ foto.image_renta }}" alt="media/{{ foto.image_renta }}" />
+                    </a>
+                  {% endif %}
+              {% endfor %}
+            </div>
               <div class="btn-group">
-                  <a
-                class="btn btn-sm btn-outline-primary" target="_parent" href="{% url 'rentapp:detail' renta.id %}"> 
-                Ver
-                  </a>
-                  <!-- <a class="btn btn-sm btn-outline-secondary" href="insertar_amistad/{{renta.usertario_id}}-{{user.id}}-{{renta.id}}" target="_parent"
-                    rel="noopener noreferrer">
-                    <i class="bi bi-envelope"></i>
-                  </a> -->
-              </div>
-              <small class="text-body-secondary">{{ renta.pub_date }}</small>
+                <a 
+                  class="btn btn-lg btn-primary" 
+                  target="_parent" 
+                  href="{% url 'rentapp:detail' renta.id %}"> 
+                  Ver
+                </a> 
+                <!-- <a class="btn btn-sm btn-outline-secondary" href="insertar_amistad/{{renta.usertario_id}}-{{user.id}}-{{renta.id}}" target="_parent"
+                  rel="noopener noreferrer">
+                  <i class="bi bi-envelope"></i>
+                </a> -->
+
+            </div>
+
+            <div class="align-items-center mt-2">
+              <p class="card-text"><i>Referencia</i>: <u>{{ renta.referencia }}</u></p>
+              
             </div>
           </div>
         </div>

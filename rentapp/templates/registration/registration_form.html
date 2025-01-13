@@ -14,8 +14,9 @@
                 <div class="alert alert-danger" role="alert">
                 {{ form.username.errors }}
                 {{ form.email.errors }}
-                {{ form.password.errors }}
-                {{ form.tipo.errors }}
+                {{ form.password1.errors }}
+                {{ form.password2.errors }}
+                {{ form.phone_number.errors }}
                 </div>
                 <input type="hidden" name="next" value="{{ next }}">
                 {% endif %}
@@ -30,8 +31,8 @@
                     
                 </div>
                 <div class="mb-3">
-                    <label for="id_tipo" class="form-label">{{ form.tipo.label }}</label>
-                    {{ form.tipo }}
+                    <label for="id_phone_number" class="form-label">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
                     
                 </div>
                 <div class="mb-3">

@@ -120,7 +120,7 @@ def insertar_user(request):
                 username = form.cleaned_data['username'],
                 password = form.cleaned_data['password'],
                 email = form.cleaned_data['email'],
-                tipo = form.cleaned_data['tipo'], )
+                tipo = form.cleaned_data['phone_number'], )
             user.set_password(form.cleaned_data['password'])
             user.save()
 
@@ -204,7 +204,7 @@ def insertar_renta(request):
     return render(request, 'rentapp/insertar_renta.html', {'form': form})
 
 def index(request):
-    rentas = list(Renta.objects.all().values().order_by('-id'))
+    rentas = list(Renta.objects.all().order_by('-id'))
     fotos_rentas = list(Foto.objects.all().values().order_by('-id'))
     # fotos_rentas = list(Foto.objects.all().select_related('renta').values(
     #     'renta__usertario', 'renta__id', 'renta__direccion',
@@ -260,7 +260,7 @@ def quien_es():
 
 @login_required
 def dashboard(request, id_user):
-    quien_es = User.objects.all().filter(id=id_user).values("tipo")[0]['tipo']
+    quien_es = User.objects.all().filter(id=id_user).values("phone_number")[0]['phone_number']
     # tener todas las rentas del usuario
     rentas = Renta.objects.all().filter(user=id_user).order_by('-id')
     # user_app = User.objects.all().filter(usertario=id_rendatario).order_by('-id')
