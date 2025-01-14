@@ -28,7 +28,7 @@
         <div class="col-md-4 mb-4">
             <div class="card border-dark">
                 <div class="card-body">
-                    <b class="card-title">{{ renta.direccion|title }}</b>
+                    <b class="card-title">{{ renta.direccion|title|slice:53 }} ...</b>
                     <p class="card-text">
                         <!-- <strong>Referencia:</strong> {{ renta.referencia|title }}<br>
                         <strong>Tipo:</strong> {{ renta.user.tipo|title }} -->

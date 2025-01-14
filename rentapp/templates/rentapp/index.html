@@ -112,12 +112,12 @@
   <!--custom cards-->
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     {% for renta in rentas %}
-      <div class="col ">
+      <div class="col mh-1">
         <div class="card shadow-sm">
-          <div class="card-body">
-            <legend><b>Se Renta</b></legend>
+          <div class="card-body mh-12">
+            <legend><b><u>Se Renta</u></b></legend>
             <p class="card-text">Por:<i> {{ renta.user|title }}</i></p>
-            <p class="card-text"><i>{{ renta.direccion|title }}</i></p>
+            <p class="card-text"><i>{{ renta.direccion|title|slice:75 }} ...</i></p>
             <!--fotos-->
             <div style="display: -webkit-inline-flex; ">
               {% for foto in fotos_rentas %}
@@ -131,7 +131,7 @@
             </div>
               <div class="btn-group">
                 <a 
-                  class="btn btn-lg btn-primary" 
+                  class="btn btn-outline-primary btn-lg " 
                   target="_parent" 
                   href="{% url 'rentapp:detail' renta.id %}"> 
                   Ver

@@ -8,13 +8,12 @@
             <fieldset class="border p-4 rounded">
                 <h3 class="bi bi-images"> Add Foto</h3>
                 {% for x in renta_title %}
-                <legend class="text-center"><u>{{ x.direccion }}</u></legend>
+                <legend class="text-center"><b><u>{{ x.direccion|title }}</u></b></legend>
                 {% endfor %}
                 <form action="{% url 'rentapp:insertar_foto' renta_id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input hidden name="renta" value="{{ renta_id }}" type="text">
                     {{ form.usertario.errors }}
-
                     <div class="mb-3">
                         <label for="customFileLang" class="form-label"><i class="bi bi-images"></i> Imagen</label>
                         <input name="image_renta" type="file" class="form-control" id="customFileLang" lang="es">
